@@ -552,6 +552,9 @@ is, an \( n_0 \)-step minorization condition is satisfied with \(
 
 \subsection*{An Example of the Cut-Off Phenomenon}
 
+% https://pages.uoregon.edu/dlevin/MARKOV/mcmt2e.pdf
+% https://sites.tufts.edu/vrdi/files/2019/06/Markov-Chains-and-Mixing-Times.pdf
+
 This subsection shows  some sharper estimates of the rate of
 convergence are possible in specific cases.  Here the case of random
 walk on the hypercube exhibits the \emph{cut-off} phenomenon.
@@ -624,10 +627,60 @@ Recall that
 Now consider the following schematic characterization of the
 hypercube.  Let the \defn{height} of a vertex be the sum of the
 coordinates of the vertex, ranging from height $0$ at $\bar{0}$ to $n$
-at $\bar{1}$.
+at $\bar{1}$.  As notation, use $\operatorname{ht}(x)$ for the hieght
+of vertex $x$.
+
 \begin{figure}
   \centering
-  
+  \begin{asy}
+settings.outformat = "pdf";
+
+import graph;
+
+size(5inches);
+
+real myfontsize = 12;
+real mylineskip = 1.2*myfontsize;
+pen mypen = fontsize(myfontsize, mylineskip);
+defaultpen(mypen);
+
+real center = 7;
+real halfwidth = 4;		// perfect square
+real height = 2 * sqrt(halfwidth) + 2 * halfwidth;
+real l = center - halfwidth;
+real r = center + halfwidth;
+real h1 = sqrt(halfwidth);
+real h2 = halfwidth;
+real height = h1 + h2 + h1;
+real rr = r + 1;
+
+real f1( real x ) { return sqrt( abs( x - center ) ); }
+real f2( real x ) { return height - sqrt(abs( x - center ) );} 
+
+draw( graph(f1, l, r) );
+draw( (l, h1)--(l, h1+h2) );
+draw( (r, h1)--(r, h1+h2) );
+draw( graph(f2, l, r) );
+
+draw( (l, h1)--(r,h1), dashed);
+draw( (l, height/2)--(r,height/2), dashed);
+draw( (l, h1+h2)--(r,h1+h2), dashed);
+
+label("$\bar{0}$", (center, 0), S);
+label("$\bar{1}$", (center, height), N);
+
+yaxis(L="Height", ymin=0, ymax = height, autorotate=false);
+ytick(Label("$0$", (0,0), E), (0,0));
+ytick(Label("$n/2 - O(\sqrt{n})$", (0,h1), SE), (0, h1));
+ytick(Label("$n/2$", (0, height/2), E), (0,height/2));
+ytick(Label("$n/2 + O(\sqrt{n})$", (0,h1+h2), NE), (0, h1+h2));
+ytick(Label("$n$", (0,height), E), (0,height));
+
+Label L1= Label("steps $\approx \frac{n}{2} \log n$", align=(0,0),
+		position=MidPoint, filltype=Fill(white));
+draw((rr,0)--(rr,h1), L=L1, bar=BeginBar, arrow=EndArrow);
+draw((rr,height)--(rr,h1+h2), L=L1, bar=BeginBar, arrow=EndArrow);
+\end{asy}
   \caption{Caricature of the hypercube in terms of the height of the
     vertices.}
   \label{fig:convergencestationary:hypercube}
@@ -644,6 +697,36 @@ Choose $i \in $\set{0, \dots, n-1}$ uniformaly at random.
 Replace $x$_i$ and $y_i$ with the same random bit $b_t = 0$ with
 probability $\frac{1}{2}$ and $b_t = 1$ with
 probability $\frac{1}{2}$.
+Let $R_t$ be the number of unselected coordinates at time $t$.  The
+random variable decreases rapidly at first, then it slows down as it
+becomes harder to select an unused coordinates.  This is basically the
+coupon collectors problems, so $\E{R_t} = n(1 - 1/n)^t$.  
+
+Give $R_t$, the Markov chains $X_t$ and $Y_t$ have heights that are
+binomial random variables,
+\begin{align*}
+\operatorname{ht}(X_t) &= \operatorname{Bin}(n - R_t, 1/2) \\
+\operatorname{ht}(X_t) &= \operatorname{Bin}(n - R_t, 1/2) + R_t.
+\end{align*}
+
+Therefore, at time $t \approx \frac{n}{2} \log n$
+\begin{align*}
+  \E{\operatorname{ht}(X_t)} &\approx \frac{n}{2} - \frac{\sqrt{n}}{2} \\
+  \E{\operatorname{ht}(Y_t)} &\approx \frac{n}{2} + \frac{\sqrt{n}}{2}
+\end{align*}
+and
+\begin{align*}
+  \sigma{\operatorname{ht}(X_t)} &= O(\sqrt{n}) \\
+  \sigma{\operatorname{ht}(Y_t)} &= O(\sqrt{n}),
+\end{align*}
+where $\sigma(X)$ is the standard deviation of a random variable.
+
+\begin{theorem}
+  Let $\epsilon > 0$.  Then there exists an $\alpha \ge 0$ so that for
+  $t(\alpha) = \frac{n}{2} \log n + \alpha n$, $\Prob{\tau >
+    t(\alpha)} < \epsilon$.
+\end{theorem}
+
 \subsection*{Continuous State Space and Point Process MCMC}
 
 Consider three particles each randomly located in the square \( [0,1]^2
