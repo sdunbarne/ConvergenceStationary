@@ -385,13 +385,13 @@ refer to the same event.  Also, \( 0 \le \Prob{X \in A, X \ne Y} \le
     \abs{\Prob{X \in A} - \Prob{Y \in A}} \le \Prob{X \ne Y}.
 \] Since the upper bound is uniform over \( A \),, this gives a bound on
 the total variation distance
-\[
+\begin{equation}\label{eqn:convergencestationary:tvbound}
     \|
     \operatorname{dist}
     (X) =
     \operatorname{dist}
     (Y) \|_{TV} = \sup_{A \subseteq \mathcal{X}} \abs{\Prob{X \in A} -
-    \Prob{Y \in A}} \le \Prob{X \ne Y} \le \Prob{X \ne Y}.
+    \Prob{Y \in A}} \le \Prob{X \ne Y}.
 \]
 \begin{definition}
     A Markov chain with state space \( \mathcal{X} \) and transition
@@ -547,7 +547,7 @@ is, an \( n_0 \)-step minorization condition is satisfied with \(
         \left( \frac{71}{80} \right)^{\lfloor n/2 \rfloor}.
     \] To get the distribution of the random walk within \( 0.01 \) of
     the stationary distribution requires \( 78 \) steps.  Compare this
-    to the estimate of \( 6 \) step using the eigenvalues of \( P \).
+    to the estimate of \( 6 \) steps using the eigenvalues of \( P \).
 \end{example}
 
 \subsection*{An Example of the Cut-Off Phenomenon}
@@ -561,15 +561,22 @@ walk on the hypercube exhibits the \emph{cut-off} phenomenon.
 
 Let \( Q^n \), the $n$-dimensional hypercube graph,
 with vertices or node set $V(Q^n) = \set{x_0, x_1, \dots x_n} =
-\set(0,1}^n$ and edge set $E(Q^n) = \setof{(x,y)}{x, y \text{differ in
-one coordinate}}$.   As a notational convenience, let $\bar{0} = (0,
+\set(0,1}^n$ and edge set $E(Q^n) = \setof{(x,y)}{x, y \text{ differ in
+one coordinate}}$.\index{hypercube}   As a notational convenience, let $\bar{0} = (0,
 dots, 0)$ denote the origin and $\bar{1} = (1, dots, 1)$ be the
 extreme vertex of the hypercube.
 
 A random walk on this graph is the 
-sequence $X_0, X_1, \dots, X_{n-1}m X_n, \dots $ where given
+sequence $X_0, X_1, \dots, X_{n-1}, X_n, \dots $ where given
 $X_{n-1}$, choose
-$X_n$ uniformly at random from the nodes adjacent to $x_{n-1}$.  As $n
+$X_n$ uniformly at random from the nodes adjacent to $x_{n-1}$.  A
+practical way to implement this random walk is to choose a coordinate
+$j \in \set{1,2, \dots, n}$ uniformly at random and flip the bit at
+$j$ from $0$ to $1$ or from $1$ to $0$.  For example, on the
+$3$-dimensional cube a walk at $011$ will move to $111$ is position
+$1$ is selected, to $001$ if position $2$ is selected, and $010$ if
+position $3$ is selected.
+As $n
 \to \infty$, the distribution of $X_n$ converges to the uniform
 distribution $\pi$ on $V(Q^n)$.  (See the exercises.)  This random
 walk has the annoying disadvantage of being periodic with period two, so
@@ -578,7 +585,11 @@ $X_{n-1}$, first choose to remain at $X_{n-1}$ with probability
 $\frac{1}{2}$.  Alternatively, with probability $\frac{1}{2}$ choose
 to move to  
 $X_n$ selected uniformly at random from the nodes adjacent to
-$x_{n-1}$.  The lazy random walk also converges to the uniform
+$x_{n-1}$.  A
+practical way to implement this random walk is to choose a coordinate
+$j \in \set{1,2, \dots, n}$ uniformly at random and replacing the bit
+in that position with the value of a fair Bernoulli random value.   the bit at
+$j$ from $0$ to $1$ or from $1$ to $0$.  The lazy random walk also converges to the uniform
 distribution $\pi$ on $V(Q^n)$.  (See the exercises.)
 
 The intention here to understand the rate of convergence to the stationary
@@ -596,7 +607,7 @@ Define $\tau_y = \inf \setof{t}{X_t = Y_t, Y_0 = y}$.  Then define a combined
 random walk $X_t = Y_t$ for $t > \tau_y$.  Since neither random walk is
 dependent on history, but only on the current state, the probability
 of states in the future is the same for each walk.  Combining the law
-of taotal probability with the triangle inequality
+of total probability with the triangle inequality
 \begin{align*}
   & \| \Prob{X_t = \cdot} - \Prob{Y_t} \|_{TV} \le \\
   & \qquad \| \Prob{X_t = \cdot \given \tau_y \le t} -
@@ -625,8 +636,8 @@ Recall that
 \end{align*}
 
 Now consider the following schematic characterization of the
-hypercube.  Let the \defn{height} of a vertex be the sum of the
-coordinates of the vertex, ranging from height $0$ at $\bar{0}$ to $n$
+hypercube.  Let the \defn{Hamming weight} of a vertex be the sum of the
+coordinates of the vertex, ranging from Hamming weight $0$ at $\bar{0}$ to $n$
 at $\bar{1}$.  As notation, use $\operatorname{ht}(x)$ for the hieght
 of vertex $x$.
 
@@ -669,7 +680,7 @@ draw( (l, h1+h2)--(r,h1+h2), dashed);
 label("$\bar{0}$", (center, 0), S);
 label("$\bar{1}$", (center, height), N);
 
-yaxis(L="Height", ymin=0, ymax = height, autorotate=false);
+yaxis(L="Hamming Weight", ymin=0, ymax = height, autorotate=false);
 ytick(Label("$0$", (0,0), E), (0,0));
 ytick(Label("$n/2 - O(\sqrt{n})$", (0,h1), SE), (0, h1));
 ytick(Label("$n/2$", (0, height/2), E), (0,height/2));
@@ -681,7 +692,7 @@ Label L1= Label("steps $\approx \frac{n}{2} \log n$", align=(0,0),
 draw((rr,0)--(rr,h1), L=L1, bar=BeginBar, arrow=EndArrow);
 draw((rr,height)--(rr,h1+h2), L=L1, bar=BeginBar, arrow=EndArrow);
 \end{asy}
-  \caption{Caricature of the hypercube in terms of the height of the
+  \caption{Caricature of the hypercube in terms of the Hamming weight of the
     vertices.}
   \label{fig:convergencestationary:hypercube}
 \end{figure}
@@ -690,23 +701,154 @@ The plan for the remander of the proof is show that both walks get to
 the bulk of the hypercube in $\frac{n}{2} \log n$ steps, and then it
 takes an additional $O(n)$ steps for them to meet.
 
-A fun way to simulate $X_t$ and $Y_t$ simultaneously is the following
-algorithm:
+An algorithm to simulate $X_t$ and $Y_t$ simultaneously is the following
 Given $X_{t-1} = x$ and $Y_{t-1} = y$
-Choose $i \in $\set{0, \dots, n-1}$ uniformaly at random.
-Replace $x$_i$ and $y_i$ with the same random bit $b_t = 0$ with
-probability $\frac{1}{2}$ and $b_t = 1$ with
-probability $\frac{1}{2}$.
-Let $R_t$ be the number of unselected coordinates at time $t$.  The
-random variable decreases rapidly at first, then it slows down as it
-becomes harder to select an unused coordinates.  This is basically the
-coupon collectors problems, so $\E{R_t} = n(1 - 1/n)^t$.  
+Choose $j \in \set{1, 2, \dots, n}$ uniformly at random.
+Replace $x_i$ and $y_i$ with the \emph{same} random bit chosen as the
+value of a fair Bernoulli random value.   For example, on
+$10$-dimensional hypercube suppose the $X$
+random walk is at $0011010011$ and the $Y$ random walk is at
+$0110001010$.  Position $6$ is selected at random, and the Bernoulli
+random variable comes up $1$.  The $6$th coordinate is $1$, leaving
+$X$ unchanged, but the $Y$ chain moves to $0110011010$.  This example
+makes it obvious that each of the walks constructed in this way is a lazy random walk on the
+hypercube.
 
-Give $R_t$, the Markov chains $X_t$ and $Y_t$ have heights that are
+If $\tau$ is the first time when all the coordinates have been
+selected at least once, then the, then the two walks agree with each
+other from time $\tau$ onward.  If the two initial states agree in
+some coordinates, the first time the walks coincide could be strictly
+before $\tau$.  Let $R_t$ be the number of unselected coordinates at
+time $t$.  The random variable decreases rapidly at first, then it
+slows down as it becomes harder to select an unused coordinates.  This
+is basically the coupon collectors problem, so
+$\E{R_t} = n(1 - 1/n)^t$.
+
+\begin{remark}
+  The usual formulation of the coupon colle tors problems
+  has \( n \) different types of coupons or
+    prizes in a cereal box.  On each draw, one obtains a coupon or prize
+    equally likely to be any one of the \( n \) types.  The goal is to
+    find the expected number of coupons one needs to gather before
+    obtaining a complete set of at least one of each type.
+\end{remark}
+
+
+\begin{theorem}
+  \begin{enumerate}
+  \item Let $X_t, Y_t$ be coupled Markov chains with $X_0 = x$ and
+    $Y_0 = y$.
+  \item Let $\Probsub{x,y}{\cdot}$ be the probability distribution for
+    $X_t, Y_t$.
+  \item Let $\tau_{\text{coal}}$ be the coalescence time of the
+    chains, that is
+    \[
+      \tau_{\text{coal}} = \min \setof{t}{X_s = Y_s, s \ge t}.
+    \end{enumerate}
+    Then
+    \[
+      \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le
+      \Probsub{x,y}{\tau_{\text{coal}} > t}
+    \]
+\end{theorem}
+
+\begin{proof}
+  \begin{enumerate}
+  \item The first observation is that
+    $P^t(x, z) = \Probsub{x,y}{X_t = z}$ and
+    $P^t(y, z) = \Probsub{x,y}{Y_t = z}$.
+  \item Using the bound on the total variation metric observed in
+    \eqref{eqn:convergencestationary:tvbound},
+    \[
+      \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \Probsub{x,y}{X_t \ne
+        Y_t}.
+    \]
+\item But $\Probsub{x,y}{X_t \ne
+        Y_t} = \Probsub{x,y}{\tau_{\text{coal}} > t}$ which completes
+      the proof.
+  \end{enumerate}
+\end{proof}
+
+Two convenient notations  are
+\[
+  d(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) - \pi \|_{TV}
+\]
+and 
+\[
+  \bar{d}(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) -
+  P^t(y,\cdot)\|_{TV}.
+\]
+
+\begin{lemma}
+  \[
+    d(t) \le \bar{d}(t) \le 2 d(t)
+\end{lemma}
+
+\begin{proof}
+  \begin{enumerate}
+   \item For the first inequality, state with the simple property of
+     stationarity $\pi(z) = \sum_{y \in \mathcal{X}}
+     \pi(y) \left[ P^t(y,z)$.
+   \item Now for any set $A$ of states, sum the previous over the
+     states $z \in A$ so
+     $\pi(A) = \sum_{y \in \mathcal{X}} \pi(y) \left[ P^t(y,A}$
+   \item Using the row sum probability for a Markov chain is $1$ and
+     applying absolute values
+     \[
+       \abs{P^t(x,A)} - \pi(A)} = \abs{\sum_{y \in \mathcal{X}}
+     \pi(y) \left[ P^t(x,A) - P^{t}(y,A)\right]}.
+   \]
+   \item By the triangle inequality, the definition of total variation
+     as the maximum difference over all events and the definition of $\bar{d}(t)$
+     \[
+       \abs{\sum_{y \in \mathcal{X}} \pi(y) \left[ P^t(x,z) -
+           P^{t(y,z)}\right]} \le \sum_{y \in \mathcal{X}} \pi(y) \| P^t(x,\cdot) -
+           P^t(y,\cdot)\|_{TV} \le \bar{d}(t).
+         \]
+  \item Maximize the left side over $X$ and $A$ yields $d(t) \le
+           \bar{d}(t)$.
+  \item For the second inequality, start with
+    the triangle inequality for the total variation distance
+    \[
+      \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le
+      \| P^t(x, \cdot) - \pi\|_{TV} + \| \pi -  P^t(y,\cdot)\|_{TV}.
+    \]
+  \item Then   
+    \[
+      \bar{d}(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le
+      \max_{x \in \mathcal{X}}\| P^t(x, \cdot) - \pi\|_{TV} + \max_{y
+        \in \mathcal{X}} \| \pi -  P^t(y,\cdot)\|_{TV} = 2 d(t).
+    \]
+  \end{enumerate}
+\end{proof}
+
+\begin{lemma}
+     Sample uniformly with replacement
+    from the set \( \set{1, 2, \dots  n} \).  Let \( \tau \) be the number of draws
+    required until each element has been drawn at least once.  Then
+    \[
+        \Prob{\tau > n \log n + c n} \le \EulerE^{-c}
+    \] for \( c \ge 0 \) and \( n \ge 1 \).
+\end{lemma}
+
+
+\begin{proof}
+    Let \( m = n \log n + c n \).  For each integer \( b \) let \( A_b \)
+    be the event ``integer \( b \) not drawn in the first \( m \) draws.
+    Then
+    \[
+        \Prob{ \tau > m} = \Prob{ \bigcup_{b=1}^n A_b } \le \sum_{b=1}^n \Prob{A_b} =
+        n \left( 1 - \frac{1}{n} \right)^m \le n \EulerE^{-m/n} = \EulerE^
+        {-c}.
+      \]
+      See the exercises for a proof of the second inequality.
+\end{proof}
+
+Given $R_t$, the Markov chains $X_t$ and $Y_t$ have Hamming weights that are
 binomial random variables,
 \begin{align*}
-\operatorname{ht}(X_t) &= \operatorname{Bin}(n - R_t, 1/2) \\
-\operatorname{ht}(X_t) &= \operatorname{Bin}(n - R_t, 1/2) + R_t.
+\operatorname{wt}(X_t) &= \operatorname{Bin}(n - R_t, 1/2) \\
+\operatorname{wt}(X_t) &= \operatorname{Bin}(n - R_t, 1/2) + R_t.
 \end{align*}
 
 Therefore, at time $t \approx \frac{n}{2} \log n$
