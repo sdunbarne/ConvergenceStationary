@@ -844,6 +844,12 @@ and
       See the exercises for a proof of the second inequality.
 \end{proof}
 
+\begin{corollary}
+  \[
+    t_{\text{mix}} \le n \log n + \log(1/\epsilon) n.
+  \]
+\end{corollary}
+
 Given $R_t$, the Markov chains $X_t$ and $Y_t$ have Hamming weights that are
 binomial random variables,
 \begin{align*}
@@ -869,6 +875,148 @@ where $\sigma(X)$ is the standard deviation of a random variable.
     t(\alpha)} < \epsilon$.
 \end{theorem}
 
+\begin{lemma}
+  Consider the coupon collecting problem with $n$ distinct coupon
+types, and let $I_j(t)$ be the indicator of the event that the $j$-th coupon has not been
+collected by time $t$. Let $R_t = \sum_{\nu = 1}^n I_j(t)$
+be the number of coupon types not collected
+by time $t$.
+The random variables $I_j(t)$ are negatively correlated, and letting $p =(1 − 1
+n)^t$, we have for $t \ge 0$,
+\begin{align*}
+  \E(R_t) &= n p \\
+  \Var{R_t} &= n p (1- p) \le \frac{n}{4}.
+\end{align*}
+\end{lemma}
+
+\begin{remark}
+  With this notation, notice the similarity to the mean and variance
+  of a binomial random variable.
+\end{remark}
+
+\begin{proof}
+  \begin{enumerate}
+  \item Since $I_j(t) = 1$ if and only if the first $t$ coupons are
+    not of type $j$, immediately
+\begin{align*}
+  \E(I_j(t) ) &= \left( 1 - \frac{1}{n} \right)^n = p \\
+  \Var{I_j(t)} &= p (1- p).
+\end{align*}
+\item Similarly, for $j \ne k$,
+  \[
+    \E{ I_j(t) I_{k(t)} = \left( 1 - \frac{2}{n} \right)^t.
+  \]
+\item Therefore
+  \[
+    \Cov{I_{j(t} I_{k(t)}} = \left( 1 - \frac{2}{n} \right)^t - \left(
+      1 - \frac{1}{n} \right)^{2t} \le 0.
+  \]
+  \end{enumerate}
+\end{proof}
+
+\begin{definition}
+  When $\mu$ is a probability distribution on $\mathcal{X}$, and $f :
+  \mathcal{X} \to \Lambda$ is a function on $\mathcal{X}$, write $\mu
+  f^{-1}$ for the probability distribution defined by
+  \[
+    (\mu f^{-1})(A) = \mu(f^{-1}(A))
+  \]
+  for $A \subset \Lambda$. When $X$ is an $\mathcal{X}$-valued random
+  variable with distribution $m$, then $f(X)$ has distribution $\mu
+  f^{-1}$ on $\Lambda$.
+\end{definition}
+
+\begin{lemma}\label{thm:convergencestationary:lem710}
+  \begin{enumerate}
+  \item Let $\mu$ and $\nu$ be probability distributions on
+    $\mathcal{X}$.
+  \item Let $f:X \to \Lambda$ be a function on $\mathcal{X}$ where
+    $\Lambda$ is a finite set.
+  \end{enumerate}
+  Then $\| \mu - \nu \|_{TV} \ge \| \mu f^{-1} - \nu f^{-1} \|_{TV}.
+\end{lemma}
+
+\begin{proof}
+  \begin{enumerate}
+  \item First (read the parentheses carefully)
+    \[
+      \abs{\mu f^{-1}(B) - \nu f^{-1}(B)} =  \abs{\mu (f^{-1}(B)) -
+        \nu (f^{-1}(B))}.
+    \]
+    \item Then
+    \[
+      \max_{B \subst \Lambda}\abs{\mu f^{-1}(B) - \nu f^{-1}(B)} \le
+      \max_{A \subset \mathcal{X}}\abs{\mu (A) - \nu (A)}.
+    \]
+
+  \end{enumerate}
+\end{proof}
+
+\begin{remark}
+  Use this lemma to lower bound the distance of some
+chain from stationarity in terms of the corresponding distance for a
+projection or lumping
+of that chain. To do so, take Λ to be the relevant partition
+of X.
+\end{remark}
+
+\begin{proposition}\label{thm:convergencestationary:prop79}
+  \begin{enumerate}
+  \item Let $f:\mathcal{X} \to \Reals$.
+  \item Let $\mu$, $\nu$ be two probability distributions on
+    $\mathcal{X}$.
+  \item Define $\sigma_{\star}^2 = \max{ \Varsub_{\mu}(f),
+      \Varsub_{\nu}(f)}$.
+  \item Suppose $\abs{ \Esub{\mu}{f} - \Esub{\nu}(f)} \ge r \sigma_{\star}$.
+  \end{enumerate}
+  Then
+  \[
+    \| \mu - \nu \|_{TV} \ge 1 - \frac{8}{r^2}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  \begin{enumerate}
+  \item Suppose without loss of generality that $\Esub{\mu}{f}} \le
+  \Esub{\nu}{f}}$.
+\item Let $A = (\Esub{\mu}{f}} + r\sigma_{\star}/2, \infty)$, then
+Chebyshev's Inequality yields that
+  $ \mu f^{-1}(A) \le \frac{4}{r^2} $ and $\nu f^{-1}(A) \ge  1 -
+  \frac{4}{r^2}$.
+\item Then
+  \[
+    \| \mu f^{-1} -\nu f^{-1} \|_{TV} \ge 1 - \frac{8}{r^2}
+  \]
+\item Then apply Lemma \ref{thm:convergencestationary:lem710} to
+  complete the proof.
+  \end{enumerate}
+\end{proof}
+
+\begin{corollary}\label{thm:convergencestationary:cor79}
+  Suppose For a Markov chain $X_t$ with transition probability matrix
+  $P$, the function $f$ satisfies
+  \[
+    \abs{ \Esub{x}{f(X_t)} - \Esub{\pi}{f}} \ge r \sigma_{\star}
+  \]
+  then
+  \[
+    \| P^t(x, \cdot) - \pi \|_{TV} \ge 1 - \frac{8}{r^2}
+\end{corollary}
+
+\begin{proof}
+  
+\end{proof}
+\begin{proposition}
+  For the lazy random walk on the $n$-dimensional hypercube
+  \[
+    d \left( \frac{1}{2} n \log n - \alpha n \right) \ge 1 - 8^{2 -
+      2\alpha}.
+  \]  
+\end{proposition}
+
+\begin{proof}
+  
+\end{proof}
 \subsection*{Continuous State Space and Point Process MCMC}
 
 Consider three particles each randomly located in the square \( [0,1]^2
