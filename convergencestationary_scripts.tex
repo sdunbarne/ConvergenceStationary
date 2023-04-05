@@ -1,0 +1,102 @@
+
+\begin{description}
+
+% \item[Geogebra] 
+
+% \link{  .ggb}{GeoGebra applet}
+
+\item[R] 
+
+\link{http://www.math.unl.edu/~sdunbar1/contStateSpace.R}{R script for contStateSpace.R}
+
+\begin{lstlisting}[language=R]
+norm <- function(x1, x2) {
+  return(sqrt(x1^2 + x2^2))
+}
+
+stationary <- function(x) {
+  K1 <- 1 / 10
+  K2 <- 1 / 10
+  sumnorms <- -K1 * sum(c(
+    norm(x[1, 1], x[2, 1]),
+    norm(x[1, 2], x[2, 2]),
+    norm(x[1, 3], x[2, 3])
+  ))
+  repel <- -K2 * sum(c(
+    norm(x[1, 2] - x[1, 1], x[2, 2] - x[2, 1]),
+    norm(x[1, 3] - x[1, 1], x[2, 3] - x[2, 1]),
+    norm(x[1, 3] - x[1, 2], x[2, 3] - x[2, 2])
+  ))
+  return(exp(sumnorms + repel))
+}
+
+acceptanceProb <- function(x, y) {
+  return(min(c(1, stationary(y) / stationary(x))))
+}
+
+x <- matrix(runif(6), nrow = 2, ncol = 3)
+
+convSteps <- 40
+for (i in 1:convSteps) {
+  y <- matrix(runif(6), nrow = 2, ncol = 3)
+  p <- acceptanceProb(x, y)
+  if (runif(1) <= p) {
+    x <- y
+  }
+}
+
+stationarySteps <- 60
+stationaryChain <- array(0, dim = c(2, 3, stationarySteps))
+for (i in 1:stationarySteps) {
+  y <- matrix(runif(6), nrow = 2, ncol = 3)
+  p <- acceptanceProb(x, y)
+  if (runif(1) <= p) {
+    stationaryChain[, , i] <- y
+  } else {
+    stationaryChain[, , i] <- x
+  }
+}
+
+plot(stationaryChain[1, 1, ], stationaryChain[2, 1, ],
+  pch = 20, col = "red", xlab = "x_1", ylab = "x_2"
+)
+points(stationaryChain[1, 2, ], stationaryChain[2, 2, ],
+  pch = 20, col = "blue"
+)
+points(stationaryChain[1, 3, ], stationaryChain[2, 3, ],
+  pch = 20, col = "green"
+)
+\end{lstlisting}  
+
+% \item[Octave]
+
+% \link{http://www.math.unl.edu/~sdunbar1/    .m}{Octave script for .}
+
+% \begin{lstlisting}[language=Octave]
+
+% \end{lstlisting}
+
+% \item[Perl] 
+
+% \link{http://www.math.unl.edu/~sdunbar1/    .pl}{Perl PDL script for .}
+
+% \begin{lstlisting}[language=Perl]
+
+% \end{lstlisting}
+
+% \item[SciPy] 
+
+% \link{http://www.math.unl.edu/~sdunbar1/    .py}{Scientific Python script for .}
+
+% \begin{lstlisting}[language=Python]
+
+% \end{lstlisting}
+
+\end{description}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

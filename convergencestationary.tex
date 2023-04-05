@@ -1,14 +1,8 @@
 %%% -*-LaTeX-*-
 %%% convergencestationary.tex.orig
 %%% Prettyprinted by texpretty lex version 0.02 [21-May-2001]
-%%% on Wed Feb  2 08:59:32 2022
-%%% for Steven R. Dunbar (sdunbar@family-desktop)
-
-%%% -*-LaTeX-*-
-%%% convergencestationary.tex.orig
-%%% Prettyprinted by texpretty lex version 0.02 [21-May-2001]
-%%% on Mon Apr 26 09:12:53 2021
-%%% for Steven R. Dunbar (sdunbar@family-desktop)
+%%% on Mon Apr  3 10:26:00 2023
+%%% for Steve Dunbar (sdunbar@family-desktop)
 
 \documentclass[12pt]{article}
 
@@ -48,6 +42,9 @@ Mathematicians Only:  prolonged scenes of intense rigor.
 \visual{Section Starter Question}{../../../../CommonInformation/Lessons/question_mark.png}
 \section*{Section Starter Question}
 
+Discuss how to measure the convergence of a Markov chain to its
+stationary distribution.
+
 \hr
 
 \visual{Key Concepts}{../../../../CommonInformation/Lessons/keyconcepts.png}
@@ -55,8 +52,119 @@ Mathematicians Only:  prolonged scenes of intense rigor.
 
 \begin{enumerate}
     \item
+        \begin{theorem}[Fundamental Theorem of Markov Chains]
+            For an irreducible, positive recurrent and aperiodic Markov
+            chain with transition probability matrix \( P \), \( \lim_{n
+            \to \infty} (P^n)_{ij} \) exists and is independent of \( i \).
+            Furthermore, letting
+            \[
+                \pi_j = \lim_{n \to \infty} (P^n)_{ij}
+            \] then \( \pi_j \) is the unique nonnegative solution of
+            \begin{align}
+                \sum\limits_{i} \pi_{i} P_{ij} &= \pi_{j},%
+                \label{eq:convergencestationary:FTMC1}\\
+                \sum\limits_{i} \pi_{i} &= 1.%
+                \label{eq:convergencestationary:FTMC2}
+            \end{align}
+        \end{theorem}
     \item
+        \begin{theorem}[Convergence Theorem by Total Variation]
+            Suppose \( P \) is the transition probability matrix for an
+            irreducible and aperiodic Markov chain on state space \(
+            \mathcal{X} \) with stationary distribution \( \pi \).  Then
+            there exist constants \( \alpha \in (0,1) \) and \( C > 0 \)
+            such that
+            \[
+                \max_{x \in \mathcal{X}} \| (P^n)_{i \cdot} - \pi \|_{TV}
+                \le C \alpha^n.
+            \]
+        \end{theorem}
     \item
+        The Fundamental Theorem has the advantage of being relatively
+        straightforward, depending only on matrix operations.  It shows
+        that the rate of convergence is exponential, although at a rate
+        like \( (1-\epsilon)^n \).  However, to actually estimate the
+        rate of convergence requires knowing powers of the transition
+        probability matrix and the stationary distribution.  The
+        estimates are weak.
+    \item
+        \begin{theorem}[Minorization Estimate]
+            If \( X_n \) is a Markov chain on \( \mathcal{X} \) with
+            transition probabilities satisfying a uniform minorization
+            condition for some \( \epsilon > 0 \), then for any positive
+            integer \( n \) and any \( x \in \mathcal{X} \)
+            \[
+                \|
+                \operatorname{dist}
+                (X_n) - \pi \|_{TV} \le (1-\epsilon)^{\lfloor n/n_0
+                \rfloor}.
+            \]
+        \end{theorem}
+    \item
+        \begin{theorem}
+            Consider a Markov chain on \( \mathcal{X} \), with \( X_0 =
+            x \) and transition probabilities \( P \).  Suppose the
+            minorization and bivariate drift conditions hold for
+            \begin{enumerate}
+                \item
+                    \( C \subseteq \mathcal{X} \),
+                \item
+                    \( h :  \mathcal{X} \times \mathcal{X} \to [1,
+                    \infty] \),
+                \item
+                    probability distribution \( \mu \), and
+                \item
+                    \( \alpha > 1 \), \( \epsilon >0 \).
+            \end{enumerate}
+            Then for any integers, \( 1 \le j \le n \) with \( B_{n_0} \)
+            as above,
+            \[
+                \|
+                \operatorname{dist}
+                (X_n) - \pi \|_{TV} \le (1-\epsilon)^j + \alpha^{-n} B_{n_0}^
+                {j-1} \Esub{Z \sim \pi}[h(x,Z)].
+            \]
+
+        \end{theorem}
+      \item
+        \begin{theorem}
+        \begin{enumerate}
+            \item
+                Let \( X_t, Y_t \) be coupled Markov chains with \( X_0
+                = x \) and \( Y_0 = y \).
+            \item
+                Let \( \Probsub{x,y}{\cdot} \) be the joint probability
+                distribution for \( X_t, Y_t \).
+            \item
+                Let \( \tau_{\text{coal}} \) be the coalescence time of
+                the chains, that is
+                \[
+                    \tau_{\text{coal}} = \min \setof{t}{X_s = Y_s, s \ge
+                    t}.
+                \]
+            \item
+                Then
+                \[
+                    \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \Probsub{x,y}
+                    {\tau_{\text{coal}} > t}.
+                \]
+        \end{enumerate}
+    \end{theorem}
+\item
+    \begin{theorem}
+        For the lazy random walk on the hypercube \( \mathbf{Q}^N \)
+        \[
+            t(\epsilon) \le \frac{1}{2} N \log N + \log(\epsilon^{-1})
+            N.
+        \]
+    \end{theorem}
+\item
+    \begin{theorem}
+        Let \( \epsilon > 0 \).  Then there exists an \( \alpha \ge 0 \)
+        so that for \( t(\alpha) = \frac{n}{2} \log n + \alpha n \), \(
+        \Prob{\tau > t(\alpha)} < \epsilon \).
+    \end{theorem}
+
 \end{enumerate}
 
 \hr
@@ -66,10 +174,10 @@ Mathematicians Only:  prolonged scenes of intense rigor.
 \begin{enumerate}
     \item
         Any vector \( (\pi)_{j} \) satisfying
-        \begin{align}
+        \begin{align*}
             \sum\limits_{i} \pi_{i} P_{ij} &= \pi_{j},\\
             \sum\limits_{i} \pi_{i} &= 1
-        \end{align}
+        \end{align*}
         is a \defn{stationary probability distribution} of the Markov
         chain.
     \item
@@ -98,9 +206,6 @@ Mathematicians Only:  prolonged scenes of intense rigor.
         Markov chain satisfies a \defn{uniform minorization condition},
         also called \defn{Doeblin's condition}.
     \item
-        The \defn{Hamming weight} of a vertex of the hypercube is the
-        sum of the coordinates of the vertex,
-    \item
         A Markov chain with a small set \( C \) satisfies a \defn{univariate
         drift condition} if there are constants \( 0 < \lambda < 1 \)
         and \( b < \infty \) and a function \( V :  \mathcal{X} \to [1,
@@ -121,9 +226,87 @@ Mathematicians Only:  prolonged scenes of intense rigor.
         \] is the expected value of \( h(X_{n+1}, Y_{n+1}) \) on the
         next iteration, when the chains start from \( x \) and \( y \)
         respectively.
+    \item
+        The \defn{Hamming weight} of a vertex of the hypercube is the
+        sum of the coordinates of the vertex.
 \end{enumerate}
 
 \hr
+
+\section*{Notation}
+\begin{enumerate}
+    \item
+        \( P \) -- transition probability matrix for a Markov chain
+    \item
+        \( \pi \) -- stationary distribution for a Markov chain
+    \item
+        \( \mathcal{X} \) -- state space for the Markov chain
+    \item
+        \( \Pi \) -- the matrix with \( \card{\mathcal{X}} \) rows, each
+        of which is the row vector \( \pi \).
+    \item
+        \( C \), \( \alpha \) -- constants defining the rate of
+        convergence
+    \item
+        \( Q \) -- stochastic matrix defined by \( P^r = (1 - \theta)\Pi
+        + \theta Q \)
+    \item
+        \( M \) -- arbitrary stochastic matrix
+    \item
+        \( N \) -- matrix with \( \pi N = \pi \)
+    \item
+        \( C \subseteq \mathcal{X} \) --a measurable subset of the state
+        space
+    \item
+        \( \mu \) -- a probability measure on \( \mathcal{X} \),
+    \item
+        \( \epsilon > 0 \) -- a constant
+    \item
+        \( n_0 \) -- a positive integer such that
+        \[
+            P^{n_0} (x, \cdot) \ge \epsilon \mu(\cdot), x \in C.
+        \]
+    \item
+        \( X_n \) and \( X_n' \) -- two different copies of a Markov
+        chain
+    \item
+        \( \mu_0 \) -- a starting probability distribution for \( X_n \)
+    \item
+        \( \vect{x}_i = (x_{i1}, x_{i2}) \) for \( i = 1,2,3 \) --
+        positions of three particles each randomly located in the square
+        \( [0,1]^2 \subset \Reals^2 \)
+    \item
+        \( B(\vect{x}, r) \) -- the ball in \( \Reals^2 \) with center \(
+        \vect{x} \) and radius \( r \)
+    \item
+        \( (\text{pi}) \) -- used for the mathematical constant instead
+        of the traditional symbol to avoid confusion with the stationary
+        distribution
+    \item
+        \( K_1 \), \( K_2 \) -- arbitrary constants in the stationary
+        distribution for the three particle system
+    \item
+        \( \mathbf{Q}^N \) -- the \( N \)-dimensional hypercube graph,
+    \item
+        \( V(\mathbf{Q}^N) = \set{x_0, x_1, \dots x_N} = \set{0,1}^N \)
+        vertices or node set
+    \item
+        \( E(\mathbf{Q}^N) = \setof{(x,y)}{x, y \text{ differ in one
+        coordinate}} \) -- edge set
+    \item
+        \( \bar{0} = (0, \dots, 0) \) -- the origin
+    \item
+        \( \bar{1} = (1, \dots, 1) \) -- the extreme vertex of the
+        hypercube.
+    \item
+        \(
+        \operatorname{ht}
+        (x) \) -- the Hamming weight of vertex \( x \).
+    \item
+        \( \tau_y = \inf \setof{t} {X_t = Y_t, Y_0 = y} \)
+    \item
+        \( R_t \) -- the number of unselected coordinates at time \( t \).
+\end{enumerate}
 
 \visual{Mathematical Ideas}{../../../../CommonInformation/Lessons/mathematicalideas.png}
 \section*{Mathematical Ideas}
@@ -131,9 +314,9 @@ Mathematicians Only:  prolonged scenes of intense rigor.
 Recall the Fundamental Theorem of Markov Chains:
 
 \begin{theorem}[Fundamental Theorem of Markov Chains]
-    For an irreducible, positive recurrent and aperiodic Markov chain \(
-    \lim_{n \to \infty} (P^n)_{ij} \) exists and is independent of \( i \).
-    Furthermore, letting
+    For an irreducible, positive recurrent and aperiodic Markov chain
+    with transition probability matrix \( P \), \( \lim_{n \to \infty} (P^n)_
+    {ij} \) exists and is independent of \( i \). Furthermore, letting
     \[
         \pi_j = \lim_{n \to \infty} (P^n)_{ij}
     \] then \( \pi_j \) is the unique non-negative solution of
@@ -148,8 +331,8 @@ Recall the Fundamental Theorem of Markov Chains:
 
 \begin{definition}
     Any vector \( (\pi)_{j} \) satisfying equations~%
-    \ref{eq:convergencestationary:FTMC1} and~%
-    \ref{eq:convergencestationary:FTMC2} is a \defn{stationary
+    \eqref{eq:convergencestationary:FTMC1} and~%
+    \eqref{eq:convergencestationary:FTMC2} is a \defn{stationary
     probability distribution}%
     \index{stationary probability
     distribution}
@@ -175,16 +358,32 @@ Recall the Fundamental Theorem of Markov Chains:
 \end{remark}
 \index{convergence rate}
 
+Knowing convergence rates is important for MCMC algorithms.  The
+convergence rate will determine if it practical to use the MCMC
+algorithm to create a desired distribution and if so how long it might
+take.  Already introduced is the eigenvalue or spectral bounds method.
+This section introduces the coupling method, and minorization and drift
+conditions, and applies them to examples on state spaces ranging from
+finite to compact to unbounded.
+
+Bounding a Markov chain's convergence rate is not a one-time, definitive
+process.  For various Markov chains, it is possible to strengthen the
+bound through careful and creative new constructions. The bounds
+presented in this section all have their imperfections, and will
+certainly not give tight or realistic bounds for all examples.
+Nevertheless, when applicable, the estimates permit confidently running
+MCMC algorithms.
+
 \subsection*{Convergence Theorem by Total Variation}
 
 \begin{theorem}[Convergence Theorem by Total Variation]
     Suppose \( P \) is the transition probability matrix for an
-    irreducible and aperiodic Markov chain with stationary distribution \(
-    \pi \).  Then there exist constants \( \alpha \in (0,1) \) and \( C
-    > 0 \) such that
+    irreducible and aperiodic Markov chain on state space \( \mathcal{X}
+    \) with stationary distribution \( \pi \).  Then there exist
+    constants \( \epsilon \in (0,1) \) and \( C > 0 \) such that
     \[
         \max_{x \in \mathcal{X}} \| (P^n)_{i \cdot} - \pi \|_{TV} \le C
-        \alpha^n.
+        (1-\epsilon)^n.
     \]
 \end{theorem}
 \index{convergence!total variation}
@@ -193,99 +392,169 @@ Recall the Fundamental Theorem of Markov Chains:
 \begin{proof}
     \begin{enumerate}
         \item
-            Since \( P \) is irreducible and aperiodic, there exist \( r
-            \) such that \( P^r \) has strictly positive entries.
+            Since \( P \) is irreducible and aperiodic, there exists an \(
+            n_0 \) such that \( P^{n_0} \) has strictly positive
+            entries.
         \item
-            Let \( \Pi \) be the matrix with \( \mathcal{X} \) rows,
-            each of which is the row vector \( \pi \).
+            Let \( \Pi \) be the matrix with \( \card{\mathcal{X}} \)
+            rows, each of which is the row vector \( \pi \).
         \item
-            For sufficiently small \( \delta > 0 \), \( (P^r)_{ij} \ge
-            \delta \pi_{j} \) for \( i,j \in \mathcal{X} \).
+            For sufficiently small \( \epsilon > 0 \), \( (P^{n_0})_{ij}
+            \ge \epsilon \pi_{j} \) for \( i,j \in \mathcal{X} \).
         \item
-            Let \( \theta = 1-\delta \).  Define stochastic matrix \( Q \)
-            by
+            Define the stochastic matrix \( Q \) by
             \[
-                P^r = (1 - \theta)\Pi + \theta Q.
+                P^{n_0} = \epsilon\Pi + (1-\epsilon) Q.
             \]
         \item
             Note that \( M \Pi = \Pi \) for any stochastic matrix and \(
-            \Pi M =\Pi \) for any matrix with \( \pi M = \pi \).
+            \Pi N =\Pi \) for any matrix with \( \pi N = \pi \).
         \item
             Claim:
             \[
-                P^{rk} = (1- \theta^{k})\Pi + \theta^k Q^k.
+                P^{n_0 k} = \epsilon^k \Pi + (1-\epsilon)^k Q^k.
             \] Proof by Induction:  For \( k=1 \), this is the
-            definition of \( Q \).  Assume the claim is true for \( k=n \).
+            definition of \( Q \).  Assume the claim is true for \( k \).
             \begin{align*}
-                P^{r(k+1)} &= P^{rn} P^r = [(1-\theta^n)\Pi + \theta^n Q^n]P^r
-                \\
-                &= (1-\theta^n)\Pi P^r + (1-\theta) \theta^n Q^n \Pi +
-                \theta^{n+1} Q^n Q.
+                P^{n_0(k+1)} &= P^{n_0 k} P^{n_0} = [\epsilon\Pi + (1-\epsilon)^k
+                Q^k]P^{n_0} \\
+                &= \epsilon^k\Pi P^{n_0} + \epsilon (1-\epsilon)^k Q^k
+                \Pi + (1-\epsilon)^{k+1} Q^k Q.
             \end{align*}
-            Use \( \Pi P^r = \Pi \) and \( Q^n \Pi = \Pi \).
+            Use \( \Pi P^{n_0} = \Pi \) and \( Q^k \Pi = \Pi \).
             \[
-                P^{r(k+1)} = (1- \theta^{k+1})\Pi + \theta^{k+1} Q^{k+1}.
+                P^{n_0(k+1)} = \epsilon^{k+1} \Pi + (1-\epsilon)^{k+1} Q^
+                {k+1}.
             \] Hence the relation holds for all \( k \).
         \item
-            Multiply by \( P^j \), and rearrange to obtain
+            Right multiply by \( P^j \), and rearrange to obtain
             \[
-                P^{rk+j} - \Pi = \theta^k (Q^k P^j - \Pi).
+                P^{n_0 k+j} - \Pi = (1-\epsilon)^k (Q^k P^j - \Pi).
             \]
         \item
-            Sum the absolute value of row \( x_0 \) on both sides and
-            divide by \( 2 \).  On the right, the absolute row \( x_0 \)
+            Recalling the definition of the total variation distance,
+            sum the absolute values of row \( i \) on both sides and
+            divide by \( 2 \).  On the right, the absolute row-\( i \)
             sum from \( (Q^k P^j - \Pi) \) is at most the largest
-            possible total variation distance between distributions (which
-            is at most \( 1 \)).  Hence
+            possible total variation distance between distributions,
+            which is at most \( 1 \).  Hence
             \[
-                \| (P^{rk+j})_{i \cdot} - \pi \|_{TV} \le \theta^k.
+                \| (P^{n_0 k+j})_{i \cdot} - \pi \|_{TV} \le (1-\epsilon)^k.
             \]
         \item
-            To finish the proof, let \( \alpha = \theta^{1/r} \) and \(
-            C= 1/\theta \).
+            To finish the proof for any \( n \), \( n = kn_0 + j \) with
+            \( 0 \le j < n_0 \).  Then \( k = \frac{n}{n_0} - \frac{j}{n_0}
+            \ge \frac{n}{n_0} - 1 \).  Let \( C= 1/(1-\epsilon) \), then
+            \[
+                \max_{x \in \mathcal{X}} \| (P^n)_{i \cdot} - \pi \|_{TV}
+                \le C (1-\epsilon)^n.
+            \]
     \end{enumerate}
 \end{proof}
 
-This theorem and is proof has the advantage of being relatively
-straightforward depending on matrix multiplications.  However,it is not
-easily descriptive of the rate of convergence.
+This proof of the Fundamental Theorem has the advantage of being
+relatively straightforward, depending only on matrix operations.  It
+shows that the rate of convergence is exponential, although at a rate
+like \( (1-\epsilon)^n \).  However, to actually estimate the rate of
+convergence requires knowing powers of the transition probability matrix
+and the stationary distribution.  The estimates are weak as the
+following examples show.
 
-\subsection*{Eigenvalue Analysis}
+\subsection*{Examples}
 
-Consider the \( 3 \times 3 \) square lattice graph in Figure~%
-\ref{fig:convergencestationary:sqlattice}.  The graph has \( 9 \)
-vertices with \( 10 \) edges between nearest lattice neighbors.  If a
-vertex has \( n \) edges then the probability of moving to a neighboring
-edge or staying at the vertex is \( \frac{1}{n+1} \) uniformly.  The
-random walk on this graph is often colorfully characterized as a frog
-hopping among lily pads or a bug leaping among plants.  The transition
-probability matrix for this random walk is
-\[
-    \begin{pmatrix}
-        1/3 & 1/3 & 0 & 1/3 & 0 & 0 & 0 & 0 & 0 \\
-        1/4 & 1/4 & 1/4 & 0 & 1/4 & 0 & 0 & 0 & 0 \\
-        0 & 1/3 & 1/3 & 0 & 0 & 1/3 & 0 & 0 & 0 \\
-        1/4 & 0 & 0 & 1/4 & 1/4 & 0 & 1/4 & 0 & 0 \\
-        0 & 1/5 & 0 & 1/5 & 1/5 & 1/5 & 0 & 1/5 & 0 \\
-        0 & 0 & 1/4 & 0 & 1/4 & 1/4 & 0 & 0 & 1/4 \\
-        0 & 0 & 0 & 1/3 & 0 & 0 & 1/3 & 1/3 & 0 \\
-        0 & 0 & 0 & 0 & 1/4 & 0 & 1/4 & 1/4 & 1/4 \\
-        0 & 0 & 0 & 0 & 0 & 1/3 & 0 & 1/3 & 1/3
-    \end{pmatrix}
-    .
-\]
+\begin{example}
+    Consider the alternative Ehrenfest urn model.%
+    \index{Ehrenfest urn model}
+    Two urns, labeled \( A \) and \( B \), contain a total of \( N = 7 \)
+    balls.  At each step a ball is selected at random with all
+    selections equally likely.  Then an urn is selected, urn \( A \)
+    with probability \( p = \frac{1}{2} \) and urn \( B \) with
+    probability \( q = 1-p = \frac {1}{2} \) and the ball is moved to
+    that urn.  The state at each step is the number of balls in the urn \(
+    A \), from \( 0 \) to \( N \).  Let the state be the number of balls
+    in urn \( A \).  The transition probability matrix is
+    \[
+        \begin{pmatrix}
+          1/2 & 1/2 & 0   & 0    & 0   & 0   & 0   & 0 \\
+          1/14& 1/2 & 3/7 & 0    & 0   & 0   & 0   & 0 \\
+          0   & 1/7 & 1/2 & 5/14 & 0   & 0   & 0   & 0 \\
+          0   & 0   &3/14 & 1/2  & 2/7 & 0   & 0   & 0 \\
+          0   & 0   & 0   & 2/7  & 1/2 & 3/14& 0   & 0 \\
+          0   & 0   & 0   & 0    & 5/14& 1/2 & 1/7 & 0 \\ 
+          0   & 0   & 0   & 0    & 0   & 3/7 & 1/2 & 1/14 \\
+          0   & 0   & 0   & 0    & 0   & 0   & 1/2 & 1/2
+        \end{pmatrix}
+        .
+    \]
 
-This Markov chain has a stationary distribution
-\[
-    \pi = (\frac{1}{11}, \frac{4}{33}, \frac{1}{11}, \frac{4}{33}, \frac
-    {5}{33}, \frac{4}{33}, \frac{1}{11}, \frac{4}{33}, \frac{1}{11}).
-\] This Markov chain is ergodic and aperiodic.  All states are
-accessible and all states communicate.  This Markov chain has no
-transient states and all states are recurrent.  This Markov chain has no
-absorbing states.
+    This Markov chain has a stationary distribution
+    \[
+        \pi = ( 1/128,7/128,21/128,35/128,35/128,21/128,7/128,1/128 ).
+    \] This Markov chain is ergodic and aperiodic.  All states are
+    accessible and all states communicate.  This Markov chain has no
+    transient states and all states are recurrent.  This Markov chain
+    has no absorbing states.
 
-\begin{figure}
-    \centering
+    Following the proof, \( P^7 \) has strictly positive entries, which
+    is reasonable since it takes at least \( 7 \) transitions from state
+    \( 0 \) to state \( 7 \).  The minimum of \( P^7_{ij}/\pi_j =
+    1440/117{,}649 \approx 0.01224 \), so for convenience take \(
+    \epsilon = 1/100 \).  Then by the last
+    step of the proof, \( \alpha = (99/100)^{1/7} \approx 0.99857 \) and
+    \( C = 100 \).  From any starting distribution, the Theorem says to
+    have the total variation distance of the chain distribution to the
+    stationary distribution less than \( 0.01 \), it is sufficient to
+    make \( 6{,}415 \) steps.
+
+    Since the second largest magnitude eigenvalue of \( P \) is
+    approximately \( 0.85714 \), the eigenvalues suggest that it will
+    take about \( \log(0.01)/\log(0.0.85714) \approx 29.874 \) steps to
+    make the total variation distance of the chain distribution to the
+    stationary distribution less than \( 0.01 \).  In fact, by numerical
+    experimentation, it takes \( 31 \) steps to make the total variation
+    distance from the stationary distribution less than \( 0.01 \), and
+    even then only when starting from one of the extreme states \( 0 \)
+    or \( 7 \), see the exercises.
+
+\end{example}
+
+\begin{example}
+    Consider the \( 3 \times 3 \) square lattice graph in Figure~%
+    \ref{fig:convergencestationary:sqlattice}.  The graph has \( 9 \)
+    vertices with \( 12 \) edges between nearest lattice neighbors.  If
+    a vertex has \( n \) edges then the probability of moving to a
+    neighboring edge or staying at the vertex is \( \frac{1}{n+1} \)
+    uniformly.  The random walk on this graph is often colorfully
+    characterized as a frog hopping among lily pads or a bug leaping
+    among plants.  The transition probability matrix for this random
+    walk is
+    \[
+        \begin{pmatrix}
+            1/3 & 1/3 & 0 & 1/3 & 0 & 0 & 0 & 0 & 0 \\
+            1/4 & 1/4 & 1/4 & 0 & 1/4 & 0 & 0 & 0 & 0 \\
+            0 & 1/3 & 1/3 & 0 & 0 & 1/3 & 0 & 0 & 0 \\
+            1/4 & 0 & 0 & 1/4 & 1/4 & 0 & 1/4 & 0 & 0 \\
+            0 & 1/5 & 0 & 1/5 & 1/5 & 1/5 & 0 & 1/5 & 0 \\
+            0 & 0 & 1/4 & 0 & 1/4 & 1/4 & 0 & 0 & 1/4 \\
+            0 & 0 & 0 & 1/3 & 0 & 0 & 1/3 & 1/3 & 0 \\
+            0 & 0 & 0 & 0 & 1/4 & 0 & 1/4 & 1/4 & 1/4 \\
+            0 & 0 & 0 & 0 & 0 & 1/3 & 0 & 1/3 & 1/3
+        \end{pmatrix}
+        .
+    \]
+
+    This Markov chain has a stationary distribution
+    \[
+        \pi = (\frac{1}{11}, \frac{4}{33}, \frac{1}{11}, \frac{4}{33},
+        \frac {5}{33}, \frac{4}{33}, \frac{1}{11}, \frac{4}{33}, \frac{1}
+        {11}).
+    \] This Markov chain is ergodic and aperiodic.  All states are
+    accessible and all states communicate.  This Markov chain has no
+    transient states and all states are recurrent.  This Markov chain
+    has no absorbing states.
+
+    \begin{figure}
+        \centering
 \begin{asy}
 size(5inches);
 
@@ -336,11 +605,6 @@ add(new void(picture pic, transform t) {
 });
 
 add(new void(picture pic, transform t) {
-    draw(pic, point(state5,E,t)--point(state6,W,t));
-    draw(pic, point(state5,S,t)--point(state8,N,t));
-});
-
-add(new void(picture pic, transform t) {
     draw(pic, point(state6,S,t)--point(state9,N,t));
 });
 
@@ -352,45 +616,61 @@ add(new void(picture pic, transform t) {
     draw(pic, point(state8,E,t)--point(state9,W,t));
 });
 \end{asy}
-    \caption{A $3 \times 3$ square lattice graph with uniform
-    transition probabilities.}%
-    \label{fig:convergencestationary:sqlattice}
-\end{figure}
+        \caption{A \( 3 \times 3 \) square lattice graph with uniform
+        transition probabilities.}%
+        \label{fig:convergencestationary:sqlattice}
+    \end{figure}
 
-The eigenvalues are
-\begin{align*}
-    \lambda_0 &= 1, \\
-    \lambda_1 &= \frac{7 + \sqrt{97}}{24} \approx 0.702, \\
-    \lambda_2 &= \frac{7 + \sqrt{97}}{24} \approx 0.702, \\
-    \lambda_3 &= \frac{1}{3}, \\
-    \lambda_4 &= \frac{1}{4}, \\
-    \lambda_5 &= \frac{1}{4}, \\
-    \lambda_6 &= \frac{7 - \sqrt{97}}{24} \approx -0.119, \\
-    \lambda_7 &= \frac{7 - \sqrt{97}}{24} \approx -0.119, \\
-    \lambda_8 &= -\frac{7}{15} \approx -0.467,
-\end{align*}
-The corresponding left eigenvectors are
+    Following the proof, \( P^4 \) has strictly positive entries, which
+    is reasonable since it takes at least \( 4 \) transitions from state
+    \( 1 \) to state \( 9 \).  The minimum of \( P^4_{ij}/\pi_j =
+    121/360 \approx 0.33611 \), so for convenience take \( \epsilon =
+    1/3 \) and \( \theta = 2/3 \).  Then by the last step of the proof, \(
+    \alpha = (2/3)^{1/4} \approx 0.90360 \) and \( C = 3/2 \).  From any
+    starting distribution, the Theorem says to have the total variation
+    distance of the chain distribution to the stationary distribution
+    less than \( 0.01 \), it is sufficient to make \( 50 \) steps.
 
-Suppose the random walk starts from the center of the square lattice,
-state \( 5 \), that is \( X_0 \sim (0,0,0,0,1,0,0,0,0) \).
+    The eigenvalues of \( P \) are
+    \begin{align*}
+        \lambda_0 &= 1, \\
+        \lambda_1 &= \frac{7 + \sqrt{97}}{24} \approx 0.70204, \\
+        \lambda_2 &= \frac{7 + \sqrt{97}}{24} \approx 0.70204, \\
+        \lambda_3 &= \frac{1}{3}, \\
+        \lambda_4 &= \frac{1}{4}, \\
+        \lambda_5 &= \frac{1}{4}, \\
+        \lambda_6 &= \frac{7 - \sqrt{97}}{24} \approx -0.11870, \\
+        \lambda_7 &= \frac{7 - \sqrt{97}}{24} \approx -0.11870, \\
+        \lambda_8 &= -\frac{7}{15} \approx -0.46667,
+    \end{align*}
+
+    Since the second largest magnitude eigenvalue of \( P \) is
+    approximately \( 0.70204 \), the eigenvalues suggest that it will
+    take about \( \log(0.01)/\log(0.70204) \approx 13 \) steps to make
+    the total variation distance of the chain distribution to the
+    stationary distribution less than \( 0.01 \).  In fact, by numerical
+    experimentation, it takes \( 12 \) steps to make the total variation
+    distance from the stationary distribution less than \( 0.01 \),
+    see the exercises.
+
+\end{example}
 
 \subsection*{Coupling and Minorization}
 
 The idea of coupling is to create two different copies of a random
-object, and compare them.  A key idea is the \defn{coupling inequality}.%
+object, and compare them.  Recall the \defn{coupling inequality}.%
 \index{coupling inequality}
 Suppose \( X \) and \( Y \) are two random variables, each with its own
-distribution.  Then for any subset \( A \),
-\begin{multline*}
-    \abs{\Prob{X \in A} - \Prob{Y \in A}} = \\
-    \abs{ \Prob{X \in A, X = Y} + \Prob{X \in A, X \ne Y } - \Prob{Y \in
-    A, X = Y} - \Prob{Y \in A, X \ne Y}}
-\end{multline*}
-However, \( \Prob{X \in A, X = Y} = \Prob{Y \in A, X = Y} \) since both
-refer to the same event.  Also, \( 0 \le \Prob{X \in A, X \ne Y} \le
-\Prob{X \ne Y} \) and \( 0 \le \Prob{Y \in A, X \ne Y} \le \Prob{X \ne Y}
-\) so \( \Prob{X \in A, X \ne Y} - \Prob{Y \in A, X \ne Y} \le \Prob{X
-\ne Y} \).  Hence
+distribution.  Then for any subset \( A \), % \begin{multline*}
+%     \abs{\Prob{X \in A} - \Prob{Y \in A}} = \\
+%     \abs{ \Prob{X \in A, X = Y} + \Prob{X \in A, X \ne Y } - \Prob{Y \in
+%     A, X = Y} - \Prob{Y \in A, X \ne Y}}
+% \end{multline*}
+% However, \( \Prob{X \in A, X = Y} = \Prob{Y \in A, X = Y} \) since both
+% refer to the same event.  Also, \( 0 \le \Prob{X \in A, X \ne Y} \le
+% \Prob{X \ne Y} \) and \( 0 \le \Prob{Y \in A, X \ne Y} \le \Prob{X \ne Y}
+% \) so \( \Prob{X \in A, X \ne Y} - \Prob{Y \in A, X \ne Y} \le \Prob{X
+% \ne Y} \).  Hence
 \[
     \abs{\Prob{X \in A} - \Prob{Y \in A}} \le \Prob{X \ne Y}.
 \] Since the upper bound is uniform over \( A \) this gives a bound on
@@ -398,7 +678,7 @@ the total variation distance
 \begin{equation}
     \label{eqn:convergencestationary:tvbound} \|
     \operatorname{dist}
-    (X) =
+    (X) -
     \operatorname{dist}
     (Y) \|_{TV} = \sup_{A \subseteq \mathcal{X}} \abs{\Prob{X \in A} -
     \Prob{Y \in A}} \le \Prob{X \ne Y}.
@@ -423,24 +703,48 @@ the total variation distance
     \index{Doeblin's condition}
 \end{definition}
 
-The uniform minorization condition implies there exists a common overlap
-of size \( \epsilon \) between all of the transition probabilities. This
-allows a coupling construction of two different copies \( X_n \) and \(
-X_n' \) of a Markov chain as follows.  Assume for now \( n_0 = 1 \).
+\begin{remark}
+    The definitions are motivated by the proof of the Convergence
+    Theorem by Total Variation.  The stationary distribution is the
+    measure \( \mu \).  In the proof, the inequality condition holds on
+    the whole state space, so the condition is a uniform minorization
+    condition.
+\end{remark}
+
+\begin{example}
+    For an example on a continuous state space, suppose the state space
+    is the half-line \( \mathcal{X} = [0, \infty) \), with transition
+    probabilities given by
+    \[
+        P(x, \df{y}) = \left( \EulerE^{-2y} + \frac{1}{\sqrt{2\pi}(x+1)}
+        \EulerE^{-\frac{y^2}{2(x+1)^2}} \right) \df{y}.
+    \] That is, from a state \( x \), the chain moves to an equal
+    mixture of an Exponential\( (2) \) distribution and a half-normal
+    distribution with mean \( 0 \) and standard deviation \( x + 1 \).
+    In this case, \( P(x, \df{y}) \ge \EulerE^{-2y} \df{y} \) for all \(
+    x \), so the chain satisfies a uniform minorization condition with \(
+    n_0 = 1 \), \( \mu(y) = 2e^{-2y} \), and \( \epsilon = 1/2 \).
+\end{example}
+
+The uniform minorization condition implies there exists a common lower
+bound of size about \( \epsilon \) between all of the transition
+probabilities.  This allows a coupling construction of two different
+copies \( X_n \) and \( X_n' \) of a Markov chain as follows.  Assume
+for now \( n_0 = 1 \).
 \begin{enumerate}
     \item
-        Choose \( X_0 \sim \mu_0(\cdot) \) and \( X_0' \sim \pi(\cdot) \)
+        Choose \( X_0 \sim \mu(\cdot) \) and \( X_0' \sim \pi(\cdot) \)
         independently.
     \item
-        If \( X_n = X_n' \), choose \( z \sim P(X, \cdot) \) and let \(
+        If \( X_n = X_n' \), choose \( z \sim P(X_n, \cdot) \) and let \(
         X_{n+1}' = X_{n+1} = z \).  Now the chains are coupled and the
         two chains will remain equal forever.
     \item
-        If \( X_n \ne X_n' \), flip a coin whose probability of heads is
-        \( \epsilon \).  If the coin shows heads, choose \( z \sim \mu(\cdot)
+        If \( X_n \ne X_n' \), flip a coin whose probability of Heads is
+        \( \epsilon \).  If the coin shows Heads, choose \( z \sim \mu(\cdot)
         \), and let \( X_{n+1}' = X_{n+1} = z \).  Otherwise, update \(
-        X_{n+1} \) and \( X_{n+1}' \) independently with probabilities
-        given by
+        X_{n+1} \) and \( X_{n+1}' \) independently with residual
+        probabilities given by
         \begin{align*}
             \Prob{X_{n+1} \in A} &= \frac{P(X_n, A) - \epsilon \mu(A)}{1-\epsilon}
             \\
@@ -449,30 +753,41 @@ X_n' \) of a Markov chain as follows.  Assume for now \( n_0 = 1 \).
         \end{align*}
 \end{enumerate}
 
-The minorization condition guarantees that the residual probabilities
-are nonnegative and are probability measures since
+The uniform minorization condition guarantees that the residual
+probabilities are nonnegative and are probability measures since
 \[
     \frac{P(X_n, \mathcal{X}) - \epsilon \mu(\mathcal{X})}{1-\epsilon} =
     \frac{1-\epsilon}{1-\epsilon} = 1.
 \]
 
 \begin{lemma}
-    \( P(X_{n+1} \in A \given X_n = x) = P(x,A) \) and \( P(X_{n+1}' \in
-    A \given X_n' = x) = P(x,A) \) for any \( x \in \mathcal{X} \)
+    \[
+        P(X_{n+1} \in A \given X_n = x) = P(x,A)
+    \] and
+    \[
+        P(X_{n+1}' \in A \given X_n' = x) = P(x,A)
+    \] for any \( x \in \mathcal{X} \).
 \end{lemma}
 
 \begin{proof}
+    If the two chains are equal at time \( n \), the construction
+    guarantees the conclusion.
+
     If the two chains are unequal at time \( n \), then
     \begin{align*}
         \Prob{X_{n+1} \in A \given X_n = x} &= \Prob{X_{n+1} \in A,\text
-        { Heads} \given X_n = x} + \Prob{X_{n+1} \in A,\text{ Tails}
-        \given X_n = x} \\
+        { Heads} \given X_n = x} + \\
+        & \qquad \Prob{X_{n+1} \in A,\text{ Tails} \given X_n = x} \\
         &= \Prob{\text Heads} \Prob{X_{n+1} \in A \given X_n = x, \text{%
-        Heads}} + \Prob{X_{n+1} \in A \given X_n = x, \text{ Tails} } \\
-        &= \epsilon \mu(A) + (1-\epsilon) \frac{\Prob{X_n, \mathcal{X} -
-        \epsilon \mu(\mathcal{X})}}{1-\epsilon} \\
+        Heads}} + \\
+        &= \qquad \Prob{\text Tails} \Prob{X_{n+1} \in A \given X_n = x,
+        \text{ Tails} } \\
+        &= \epsilon \mu(A) + (1-\epsilon) \frac{\Prob{X_n, \mathcal{X}}
+        - \epsilon \mu(\mathcal{X})}{1-\epsilon} \\
         &= P(x,A).
     \end{align*}
+
+    The calculation is the same for \( X_n' \).
 \end{proof}
 
 \begin{theorem}[Minorization Estimate]
@@ -488,35 +803,48 @@ are nonnegative and are probability measures since
 \end{theorem}
 \index{minorization estimate}
 
+\begin{remark}
+    This theorem is essentially a restatement of the Convergence Theorem
+    by Total Variation in the more general setting of probability spaces
+    and measures.  The proof uses coupling instead of matrix operations.
+\end{remark}
+
 \begin{proof}
-    In \( n_0 > 1 \), use the construction above for the times \( n = 0,
-    n_0, 2n_0, \dots \) with \( n+1 \) replaced by \( n + n_0 \) and
-    with \( P \) replaced by \( P^{n_0} \).  Then fill in the
-    intermediate state \( X_n \) for \( j n_0 < n < (j+1) n_0 \) from
-    the appropriate conditional distribution given the
-    already-constructed values of \( X_{j n_0} \) and \( X_{(j_+1)n_0} \).
-
-    Since \( X_0' \sim \pi \) and \( \pi \) is stationary, then \( X_n'
-    \sim \pi \) for all \( n \).  Every \( n_0 \) steps, the two chains
-    have probability at least \( \epsilon \) of coupling because the
-    coin comes up Heads.  So
-
-    \( \Prob(X_n \ne X_n') \le (1-\epsilon)^{\lfloor n/n_0 \rfloor} \).
+    \begin{enumerate}
+        \item
+            If \( n_0 > 1 \), use the coupling construction above for
+            the times \( n = 0, n_0, 2n_0, \dots \) with \( n+1 \)
+            replaced by \( n + n_0 \) and with \( P \) replaced by \( P^
+            {n_0} \).
+        \item
+            Then fill in the intermediate states \( X_n \) for \( j n_0
+            < n < (j+1) n_0 \) from the appropriate conditional
+            distribution given the already-constructed values of \( X_{j
+            n_0} \) and \( X_{(j+1)n_0} \).
+        \item
+            Since \( X_0' \sim \pi \) and \( \pi \) is stationary, then \(
+            X_n' \sim \pi \) for all \( n \).  Every \( n_0 \) steps,
+            the two chains have probability at least \( \epsilon \) of
+            coupling because the coin comes up Heads.  So \( \Prob{X_n
+            \ne X_n'} \le (1-\epsilon)^{\lfloor n/n_0 \rfloor} \).
+        \item
+            Now apply the Coupling Inequality.
+    \end{enumerate}
 \end{proof}
 
 Assume \( \mathcal{X} \) is finite and for some \( n_0 \) there is at
 least one state \( j \in \mathcal{X} \) such that the \( j \)th column
 of \( P^{n_0} > 0 \) for all \( x \in \mathcal{X} \).  Then set \(
-\epsilon = \sum_{x \in \mathcal{X}} \min_{i \in \mathcal{X}} (P^{n_0})_{i,j}
+\epsilon = \sum_{j \in \mathcal{X}} \min_{i \in \mathcal{X}} (P^{n_0})_{i,j}
 > 0 \) and \( \mu(j) = \epsilon^{-1} (P^{n_0})_{i,j} \) so \( (P^{n_0})_
 {i,j} \ge \epsilon \mu(j) \) for all \( i,j \in \mathcal{X} \).  That
 is, an \( n_0 \)-step minorization condition is satisfied with \(
 \epsilon \).
 
 \begin{example}
-    Consider the random walk on the \( 3 \times 3 \) square lattice. The
-    transition probabilities do not satisfy a minorization condition
-    since every column has some zeros.  However, in \( P^2 \), column
+    Consider the random walk on the \( 3 \times 3 \) square lattice.
+    The transition probabilities do not satisfy a minorization condition
+    since every column has some zeros.  However, in \( P^2 \), column $5$
     has all positive values,
     \[
         \begin{pmatrix}
@@ -541,9 +869,9 @@ is, an \( n_0 \)-step minorization condition is satisfied with \(
             \frac{1}{12} & \frac{7}{36} & \frac{5}{18}
         \end{pmatrix}
         .
-    \] The walk starting in state \( 5 \) will always have at least a
-    probability \( \frac{9}{80} \) that it will return to state \( 5 \)
-    in two steps.  Take the minorization condition as
+    \] The walk always has probability at least \( \frac{9}{80} \) that
+    it will jump to state \( 5 \) in two steps.  Take the minorization
+    condition as
     \[
         \epsilon = \sum_{x \in \mathcal{X}} \min_{j \in \mathcal{X}} (P^2)_
         {i,j} = 0 + 0 + 0 + 0 + \frac{9}{80} + 0 + 0 + 0 + 0 = \frac{9}{80}
@@ -552,775 +880,177 @@ is, an \( n_0 \)-step minorization condition is satisfied with \(
     \[
         \|
         \operatorname{dist}
-        (Xn) - \pi \|_{TV} \le (1-\frac{9}{80})^{\lfloor n/2 \rfloor} -
+        (X_n) - \pi \|_{TV} \le (1-\frac{9}{80})^{\lfloor n/2 \rfloor} =
         \left( \frac{71}{80} \right)^{\lfloor n/2 \rfloor}.
     \] To get the distribution of the random walk within \( 0.01 \) of
     the stationary distribution requires \( 78 \) steps.  Compare this
-    to the estimate of \( 6 \) steps using the eigenvalues of \( P \).
+    to the estimate of \( 14 \) steps using the powers of \( P \).
 \end{example}
 
-\subsection*{An Example of the Cut-Off Phenomenon}
+% to here on Wed Mar 29 11:57:15 AM CDT 2023
 
-% https://pages.uoregon.edu/dlevin/MARKOV/mcmt2e.pdf
-% https://sites.tufts.edu/vrdi/files/2019/06/Markov-Chains-and-Mixing-Times.pdf
-
-This subsection shows some sharper estimates of the rate of convergence
-using coupling in specific cases.  Here the case of random walk on the
-hypercube exhibits the \emph{cut-off} phenomenon.%
-\index{cut-off phenomenon}
-
-Let \( Q^n \), the \( n \)-dimensional hypercube graph, with vertices or
-node set \( V(Q^n) = \set{x_0, x_1, \dots x_n} = \set{0,1}^n \) and edge
-set \( E(Q^n) = \setof{(x,y)}{x, y \text{ differ in one coordinate}} \).%
-\index{hypercube}
-As a notational convenience, let \( \bar{0} = (0, dots, 0) \) denote the
-origin and \( \bar{1} = (1, dots, 1) \) be the extreme vertex of the
-hypercube.
-
-A random walk on this graph is the sequence \( X_0, X_1, \dots, X_{n-1},
-X_n, \dots \) where given \( X_{n-1} \), choose \( X_n \) uniformly at
-random from the nodes adjacent to \( x_{n-1} \).%
-\index{random walk!hypercube}
-A practical way to implement this random walk is to choose a coordinate \(
-j \in \set{1,2, \dots, n} \) uniformly at random and flip the bit at \(
-j \) from \( 0 \) to \( 1 \) or from \( 1 \) to \( 0 \).  For example,
-on the \( 3 \)-dimensional cube a walk at \( 011 \) will move to \( 111 \)
-is position \( 1 \) is selected, to \( 001 \) if position \( 2 \) is
-selected, and \( 010 \) if position \( 3 \) is selected. As \( n \to
-\infty \), the distribution of \( X_n \) converges to the uniform
-distribution \( \pi \) on \( V(Q^n) \).  (See the exercises.) This
-random walk has the annoying disadvantage of being periodic with period
-two, so instead consider the \emph{lazy random walk}%
-\index{lazy random walk}
-sequence \( X_0, X_1, \dots, X_{n-1}m X_n, \dots \) where given \( X_{n-1}
-\), first choose to remain at \( X_{n-1} \) with probability \( \frac{1}
-{2} \).  Alternatively, with probability \( \frac{1}{2} \) choose to
-move to \( X_n \) selected uniformly at random from the nodes adjacent
-to \( x_{n-1} \).  A practical way to implement this random walk is to
-choose a coordinate \( j \in \set{1,2, \dots, n} \) uniformly at random
-and replace the bit in that position with the value of a fair Bernoulli
-random value. The lazy random walk also converges to the uniform
-distribution \( \pi \) on \( V(Q^n) \).  (See the exercises.)
-
-The intention here to understand the rate of convergence to the
-stationary distribution in the Total Variation norm.  More precisely,
-given fixed \( \epsilon \) what the smallest \( t = t(n) \) such that
-\[
-    \| \Prob{X_t} - \pi \|_{TV} < \epsilon
-\] as a function \( n \).
-
-The investigation proceeds by coupling.%
-\index{coupling}
-Start one random walk \( X \) at \( \bar{0} \), and start another random
-walk \( Y \) ``far'' from \( \bar{0} \). Define \( \tau_y = \inf \setof{t}
-{X_t = Y_t, Y_0 = y} \).  Then define a combined random walk \( X_t = Y_t
-\) for \( t > \tau_y \).  Since neither random walk is dependent on
-history, but only on the current state, the probability of states in the
-future is the same for each walk.  Combining the law of total
-probability with the triangle inequality
-\begin{align*}
-    & \| \Prob{X_t = \cdot} - \Prob{Y_t} \|_{TV} \le \\
-    & \qquad \| \Prob{X_t = \cdot \given \tau_y \le t} - \Prob{Y_t} =
-    \cdot \given \tau_y \le t \|_{TV} \Prob{\tau_y \le t} +\\
-    & \qquad \| \Prob{X_t = \cdot \given \tau_y > t} - \Prob{Y_t} =
-    \cdot \given \tau_y \le t \|_{TV} \Prob{\tau_y > t} & \qquad = \|
-    \Prob{X_t = \cdot \given \tau_y > t} - \Prob{Y_t} = \cdot \given
-    \tau_y \le t \|_{TV} \Prob{\tau_y > t} & \le \Prob{\tau_y > t}.
-\end{align*}
-Notice the first summand is \( 0 \)
-\[
-    \| 0 = \Prob{X_t = \cdot \given \tau_y \le t} - \Prob{Y_t} = \cdot
-    \given \tau_y \le t \|_{TV} \Prob{\tau_y \le t}
-\] and the last inequality follows because \( \| \cdot \|_{TV} \le 1 \).
-This inequality is basically the Strong Markov Property. {Why is this
-so, it seems that it ought to be the second summand.}
-
-Recall
-\begin{align*}
-    \| \Prob{X_t = \cdot} - \pi \|_{TV} &\le \max_{y} \| \Prob{X_t =
-    \cdot} - \Prob{Y_t \given Y_0 = y} \|_{TV} \\
-    &\le \| \Prob{X_t = \cdot} - \Prob{Y_t \given Y = \bar{1}} \|_{TV}
-    \\
-    &\le \Prob{\tau_{\bar{1}}} > t
-\end{align*}
-
-Let the \defn{Hamming weight}%
-\index{Hamming weight}
-of a vertex be the sum of the coordinates of the vertex, ranging from
-Hamming weight \( 0 \) at \( \bar{0} \) to \( n \) at \( \bar{1} \).  As
-notation, use \(
-\operatorname{ht}
-(x) \) for the hieght of vertex \( x \).  Consider the schematic
-characterization of the hypercube in Figure~%
-\ref{fig:convergencestationary:hypercube}. The plan for the remander of
-the proof is show that both walks get to the bulk of the hypercube in \(
-\frac{n}{2} \log n \) steps, and then it takes an additional \( O(n) \)
-steps for them to meet.
-
-\begin{figure}
-    \centering
-\begin{asy}
-settings.outformat = "pdf";
-
-import graph;
-
-size(5inches);
-
-real myfontsize = 12;
-real mylineskip = 1.2*myfontsize;
-pen mypen = fontsize(myfontsize, mylineskip);
-defaultpen(mypen);
-
-real center = 7;
-real halfwidth = 4;		// perfect square
-real height = 2 * sqrt(halfwidth) + 2 * halfwidth;
-real l = center - halfwidth;
-real r = center + halfwidth;
-real h1 = sqrt(halfwidth);
-real h2 = halfwidth;
-real height = h1 + h2 + h1;
-real rr = r + 1;
-
-real f1( real x ) { return sqrt( abs( x - center ) ); }
-real f2( real x ) { return height - sqrt(abs( x - center ) );} 
-
-draw( graph(f1, l, r) );
-draw( (l, h1)--(l, h1+h2) );
-draw( (r, h1)--(r, h1+h2) );
-draw( graph(f2, l, r) );
-
-draw( (l, h1)--(r,h1), dashed);
-draw( (l, height/2)--(r,height/2), dashed);
-draw( (l, h1+h2)--(r,h1+h2), dashed);
-
-label("$\bar{0}$", (center, 0), S);
-label("$\bar{1}$", (center, height), N);
-
-yaxis(L="Hamming Weight", ymin=0, ymax = height, autorotate=false);
-ytick(Label("$0$", (0,0), E), (0,0));
-ytick(Label("$n/2 - O(\sqrt{n})$", (0,h1), SE), (0, h1));
-ytick(Label("$n/2$", (0, height/2), E), (0,height/2));
-ytick(Label("$n/2 + O(\sqrt{n})$", (0,h1+h2), NE), (0, h1+h2));
-ytick(Label("$n$", (0,height), E), (0,height));
-
-Label L1= Label("steps $\approx \frac{n}{2} \log n$", align=(0,0),
-		position=MidPoint, filltype=Fill(white));
-draw((rr,0)--(rr,h1), L=L1, bar=BeginBar, arrow=EndArrow);
-draw((rr,height)--(rr,h1+h2), L=L1, bar=BeginBar, arrow=EndArrow);
-\end{asy}
-    \caption{Caricature of the hypercube in terms of the Hamming weight
-    of the vertices.}%
-    \label{fig:convergencestationary:hypercube}
-\end{figure}
-
-An algorithm to simulate \( X_t \) and \( Y_t \) simultaneously is the
-following Given \( X_{t-1} = x \) and \( Y_{t-1} = y \) Choose \( j \in
-\set{1, 2, \dots, n} \) uniformly at random. Replace \( x_i \) and \( y_i
-\) with the \emph{same} random bit chosen as the value of a fair
-Bernoulli random value.  For example, on \( 10 \)-dimensional hypercube
-suppose the \( X \) random walk is at \( 0011010011 \) and the \( Y \)
-random walk is at \( 0110001010 \).  Position \( 6 \) is selected at
-random, and the Bernoulli random variable comes up \( 1 \).  The \( 6 \)th
-coordinate is \( 1 \), leaving \( X \) unchanged, but the \( Y \) chain
-moves to \( 0110011010 \).  This example makes it obvious each of the
-walks constructed in this way is a lazy random walk on the hypercube.
-
-If \( \tau \) is the first time when all the coordinates have been
-selected at least once, then the, then the two walks agree with each
-other from time \( \tau \) onward.  If the two initial states agree in
-some coordinates, the first time the walks coincide could be strictly
-before \( \tau \).  Let \( R_t \) be the number of unselected
-coordinates at time \( t \).  The random variable decreases rapidly at
-first, then it slows down as it becomes harder to select an unused
-coordinates.  This is basically the coupon collectors problem, so \( \E{R_t}
-= n(1 - 1/n)^t \).
-
-\begin{remark}
-    The usual formulation of the coupon collectors problem%
-    \index{coupon
-    collectors problem}
-    has \( n \) different types of coupons or prizes in a cereal box.
-    On each draw, one gets a coupon or prize equally likely to be any
-    one of the \( n \) types.  The goal is to find the expected number
-    of coupons one needs to gather before getting a complete set of at
-    least one of each type.
-\end{remark}
-
-\begin{theorem}
-    \begin{enumerate}
-        \item
-            Let \( X_t, Y_t \) be coupled Markov chains with \( X_0 = x \)
-            and \( Y_0 = y \).
-        \item
-            Let \( \Probsub{x,y}{\cdot} \) be the probability
-            distribution for \( X_t, Y_t \).
-        \item
-            Let \( \tau_{\text{coal}} \) be the coalescence time of the
-            chains, that is
-            \[
-                \tau_{\text{coal}} = \min \setof{t}{X_s = Y_s, s \ge t}.
-            \]
-        \item
-            Then
-            \[
-                \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \Probsub{x,y}
-                {\tau_{\text{coal}} > t}.
-            \]
-    \end{enumerate}
-\end{theorem}
-
-\begin{proof}
-    \begin{enumerate}
-        \item
-            The first observation is that \( P^t(x, z) = \Probsub{x,y}{X_t
-            = z} \) and \( P^t(y, z) = \Probsub{x,y}{Y_t = z} \).
-        \item
-            Using the bound on the total variation metric observed in~\eqref
-            {eqn:convergencestationary:tvbound},
-            \[
-                \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \Probsub{x,y}
-                {X_t \ne Y_t}.
-            \]
-        \item
-            But \( \Probsub{x,y}{X_t \ne Y_t} = \Probsub{x,y}{\tau_{\text
-            {coal}} > t} \) which completes the proof.
-    \end{enumerate}
-\end{proof}
-
-Two convenient notations are
-\[
-    d(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) - \pi \|_{TV}
-\] and
-\[
-    \bar{d}(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) - P^t(y,\cdot)\|_
-    {TV}.
-\]
-
-\begin{lemma}
+\subsection*{An Example in a Continuous State Space}
+\begin{example}
+    Consider three particles each randomly located in the square \( [0,1]^2
+    \subset \Reals^2 \) with positions \( \vect{x}_i = (x_{i1}, x_{i2}) \)
+    for \( i = 1,2,3 \).  The state space is \( \mathcal{X} = [0,1]^6 \).
+    Suppose the positions of the particles are distributed according to
+    the density
     \[
-        d(t) \le \bar{d}(t) \le 2 d(t)
-    \]
-\end{lemma}
+        \pi(x) = \pi(\vect{x_1}, \vect{x_2}, \vect{x_3}) = \frac{1}{z}
+        \exp\left[ -K_1 \sum\limits_{i=1}^3 \|\vect{x_i}\| - \sum\limits_
+        {i<j} \frac{1}{\| \vect{x_i} - \vect{x_j} \|} \right]
+    \] where \( \| \cdot \| \) is the usual Euclidean norm on \( \Reals^2
+    \), \( K_1 \) and \( K_2 \) are fixed positive constants and \( z \)
+    is the normalizing constant or partition function.  In this density
+    the first sum pushes the particle towards the origin, the second sum
+    pushes them away from each other.
 
-\begin{proof}
-    \begin{enumerate}
-        \item
-            For the first inequality, state with the simple property of
-            stationarity \( \pi(z) = \sum_{y \in \mathcal{X}} \pi(y)
-            \left[ P^t(y,z) \right] \).
-        \item
-            Now for any set \( A \) of states, sum the previous over the
-            states \( z \in A \) so \( \pi(A) = \sum_{y \in \mathcal{X}}
-            \pi(y) \left[ P^t(y,A) \right] \)
-        \item
-            Using the row sum probability for a Markov chain is \( 1 \)
-            and applying absolute values
-            \[
-                \abs{P^t(x,A) - \pi(A)} = \abs{\sum_{y \in \mathcal{X}}
-                \pi(y) \left[ P^t(x,A) - P^{t}(y,A)\right]}.
-            \]
-        \item
-            By the triangle inequality, the definition of total
-            variation as the maximum difference over all events and the
-            definition of \( \bar{d}(t) \)
-            \[
-                \abs{\sum_{y \in \mathcal{X}} \pi(y) \left[ P^t(x,z) - P^
-                {t(y,z)}\right]} \le \sum_{y \in \mathcal{X}} \pi(y) \|
-                P^t(x,\cdot) - P^t(y,\cdot)\|_{TV} \le \bar{d}(t).
-            \]
-        \item
-            Maximize the left side over \( X \) and \( A \) yields \( d(t)
-            \le \bar{d}(t) \).
-        \item
-            For the second inequality, start with the triangle
-            inequality for the total variation distance
-            \[
-                \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \| P^t(x,
-                \cdot) - \pi\|_{TV} + \| \pi - P^t(y,\cdot)\|_{TV}.
-            \]
-        \item
-            Then
-            \[
-                \bar{d}(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) -
-                P^t(y,\cdot)\|_{TV} \le \max_{x \in \mathcal{X}}\| P^t(x,
-                \cdot) - \pi\|_{TV} + \max_{y \in \mathcal{X}} \| \pi -
-                P^t(y,\cdot)\|_{TV} = 2 d(t).
-            \]
-    \end{enumerate}
-\end{proof}
+    Using the Metropolis algorithm, create a Markov chain with \( \pi \)
+    as its stationary distribution.  Given \( X_n \), first choose \( y
+    \in [0,1]^6 \) from the uniform distribution on \( \mathcal{X} \).
+    Then with probability \( r = \min{1, \pi(y)/\pi(x)} \), accept \( X_
+    {n+1} = y \), otherwise reject \( y \) and \( X_{n+1} = x \).  Then
+    this Markov chain has \( \pi \) as its stationary distribution.
 
-\begin{lemma}
-    Sample uniformly with replacement from the set \( \set{1, 2, \dots n}
-    \).  Let \( \tau \) be the number of draws required until each
-    element has been drawn at least once.  Then
-    \[
-        \Prob{\tau > n \log n + c n} \le \EulerE^{-c}
-    \] for \( c \ge 0 \) and \( n \ge 1 \).
-\end{lemma}
+    \begin{lemma}
+        The Metropolis algorithm Markov chain for the \( 3 \) particle
+        system with stationary distribution
+        \[
+            \pi(x) = \pi(\vect{x_1}, \vect{x_2}, \vect{x_3}) = \frac{1}{z}
+            \exp\left[ -K_1 \sum\limits_ {i=1}^3 \|\vect{x_i}\| - \sum\limits_
+            {i<j} \frac{1}{\| \vect{x_i} - \vect{x_j} \|} \right]
+        \] satisfies a uniform minorization condition with \( n_0 = 1 \)
+        and \( \epsilon = (0.488) \exp(-K_1(3 \sqrt{2}) - K_2(12 - 3/
+        \sqrt{2})) \)
+    \end{lemma}
 
-\begin{proof}
-    Let \( m = n \log n + c n \).  For each integer \( b \) let \( A_b \)
-    be the event ``integer \( b \) not drawn in the first \( m \) draws.
-    Then
-    \[
-        \Prob{ \tau > m} = \Prob{ \bigcup_{b=1}^n A_b } \le \sum_{b=1}^n
-        \Prob{A_b} = n \left( 1 - \frac{1}{n} \right)^m \le n \EulerE^{-m/n}
-        = \EulerE^ {-c}.
-    \] See the exercises for a proof of the second inequality.
-\end{proof}
+    \begin{remark}
 
-\begin{corollary}
-    \[
-        t_{\text{mix}} \le n \log n + \log(1/\epsilon) n.
-    \]
-\end{corollary}
+    \end{remark}
+    With \( 3 \sqrt{2} \approx 4.243 \) and \( 12 - 3/\sqrt{2} \approx
+    9.879 \), the estimate \( \epsilon = (0.488) \exp(-K_1(4.25) - K_2(9.88))
+    \) is simpler.
 
-Given \( R_t \), the Markov chains \( X_t \) and \( Y_t \) have Hamming
-weights that are binomial random variables,
-\begin{align*}
-    \operatorname{wt}
-    (X_t) &=
-    \operatorname{Bin}
-    (n - R_t, 1/2) \\
-    \operatorname{wt}
-    (X_t) &=
-    \operatorname{Bin}
-    (n - R_t, 1/2) + R_t.
-\end{align*}
-
-Therefore, at time \( t \approx \frac{n}{2} \log n \)
-\begin{align*}
-    \E{%
-    \operatorname{ht}
-    (X_t)} &\approx \frac{n}{2} - \frac{\sqrt{n}}{2}, \\
-    \E{%
-    \operatorname{ht}
-    (Y_t)} &\approx \frac{n}{2} + \frac{\sqrt{n}}{2}.
-\end{align*}
-and
-\begin{align*}
-    \sigma{%
-    \operatorname{ht}
-    (X_t)} &= O(\sqrt{n}) \\
-    \sigma{%
-    \operatorname{ht}
-    (Y_t)} &= O(\sqrt{n}),
-\end{align*}
-where \( \sigma(X) \) is the standard deviation of a random variable.
-
-\begin{theorem}
-    Let \( \epsilon > 0 \).  Then there exists an \( \alpha \ge 0 \) so
-    that for \( t(\alpha) = \frac{n}{2} \log n + \alpha n \), \( \Prob{\tau
-    > t(\alpha)} < \epsilon \).
-\end{theorem}
-
-\begin{lemma}
-    \label{thm:convergence:lem713}%
-    \index{coupon collectors problem}
-    Consider the coupon collecting problem with \( n \) distinct coupon
-    types, and let \( I_j(t) \) be the indicator of the event that the \(
-    j \)-th coupon has not been collected by time \( t \).  Let \( R_t =
-    \sum_{\nu = 1}^n I_j(t) \) be the number of coupon types not
-    collected by time \( t \). The random variables \( I_j(t) \) are
-    negatively correlated, and letting \( p =(1 - 1 n)^t \), we have for
-    \( t \ge 0 \),
-    \begin{align*}
-        \E(R_t) &= n p \\
-        \Var{R_t} &= n p (1- p) \le \frac{n}{4}.
-    \end{align*}
-\end{lemma}
-
-\begin{remark}
-    With this notation, notice the similarity to the mean and variance
-    of a binomial random variable.
-\end{remark}
-
-\begin{proof}
-    \begin{enumerate}
-        \item
-            Since \( I_j(t) = 1 \) if and only if the first \( t \)
-            coupons are not of type \( j \), immediately
-            \begin{align*}
-                \E(I_j(t) ) &= \left( 1 - \frac{1}{n} \right)^n = p \\
-                \Var{I_j(t)} &= p (1- p).
-            \end{align*}
-        \item
-            Similarly, for \( j \ne k \),
-            \[
-                \E{ I_j(t) I_k(t) } = \left( 1 - \frac{2}{n} \right)^t.
-            \]
-        \item
-            Therefore
-            \[
-                \Cov{I_j(t) I_k(t)} = \left( 1 - \frac{2}{n} \right)^t -
-                \left( 1 - \frac{1}{n} \right)^{2t} \le 0.
-            \]
-    \end{enumerate}
-\end{proof}
-
-\begin{definition}
-    When \( \mu \) is a probability distribution on \( \mathcal{X} \),
-    and \( f : \mathcal{X} \to \Lambda \) is a function on \( \mathcal{X}
-    \), write \( \mu f^{-1} \) for the probability distribution defined
-    by
-    \[
-        (\mu f^{-1})(A) = \mu(f^{-1}(A))
-    \] for \( A \subset \Lambda \).  When \( X \) is an \( \mathcal{X} \)-valued
-    random variable with distribution \( m \), then \( f(X) \) has
-    distribution \( \mu f^{-1} \) on \( \Lambda \).
-\end{definition}
-
-\begin{lemma}
-    \label{thm:convergencestationary:lem710}
-    \begin{enumerate}
-        \item
-            Let \( \mu \) and \( \nu \) be probability distributions on \(
-            \mathcal{X} \).
-        \item
-            Let \( f:X \to \Lambda \) be a function on \( \mathcal{X} \)
-            where \( \Lambda \) is a finite set.
-    \end{enumerate}
-    Then \( \| \mu - \nu \|_{TV} \ge \| \mu f^{-1} - \nu f^{-1} \|_{TV} \).
-\end{lemma}
-
-\begin{proof}
-    \begin{enumerate}
-        \item
-            First (read the parentheses carefully)
-            \[
-                \abs{\mu f^{-1}(B) - \nu f^{-1}(B)} = \abs{\mu (f^{-1}(B))
-                - \nu (f^{-1}(B))}.
-            \]
-        \item
-            Then
-            \[
-                \max_{B \subset \Lambda}\abs{\mu f^{-1}(B) - \nu f^{-1}(B)}
-                \le \max_{A \subset \mathcal{X}}\abs{\mu (A) - \nu (A)}.
-            \]
-
-    \end{enumerate}
-\end{proof}
-
-\begin{remark}
-    Use this lemma to lower bound the distance of some chain from
-    stationarity in terms of the corresponding distance for a projection
-    or lumping of that chain.  To do so, take \( \Lambda \) to be the
-    relevant partition of X.
-\end{remark}
-
-\begin{proposition}
-    \label{thm:convergencestationary:prop79}
-    \begin{enumerate}
-        \item
-            Let \( f:\mathcal{X} \to \Reals \).
-        \item
-            Let \( \mu \), \( \nu \) be two probability distributions on
-            \( \mathcal{X} \).
-        \item
-          Define \( \sigma_{\star}^2 = \max[ \Varsub{\mu}{f},
-            \Varsub{\nu}{f} ] \).
-        \item
-            Suppose \( \abs{ \Esub{\mu}{f} - \Esub{\nu}(f)} \ge r \sigma_
-            {\star} \).
-    \end{enumerate}
-    Then
-    \[
-        \| \mu - \nu \|_{TV} \ge 1 - \frac{8}{r^2}.
-    \]
-\end{proposition}
-
-\begin{proof}
-    \begin{enumerate}
-        \item
-            Suppose without loss of generality that \( \Esub{\mu}{f} \le
-            \Esub{\nu}{f} \).
-        \item
-            Let \( A = (\Esub{\mu}{f} + r\sigma_{\star}/2, \infty) \),
-            then Chebyshev's Inequality yields \( \mu f^{-1}(A) \le
-            \frac{4}{r^2} \) and \( \nu f^{-1}(A) \ge 1 - \frac{4}{r^2} \).
-        \item
-            Then
-            \[
-                \| \mu f^{-1} -\nu f^{-1} \|_{TV} \ge 1 - \frac{8}{r^2}.
-            \]
-        \item
-            Then apply Lemma~%
-            \ref{thm:convergencestationary:lem710} to complete the
-            proof.
-    \end{enumerate}
-\end{proof}
-
-\begin{corollary}
-    \label{thm:convergencestationary:cor79} Suppose For a Markov chain \(
-    X_t \) with transition probability matrix \( P \), the function \( f
-    \) satisfies
-    \[
-        \abs{ \Esub{x}{f(X_t)} - \Esub{\pi}{f}} \ge r \sigma_{\star}
-    \] then
-    \[
-        \| P^t(x, \cdot) - \pi \|_{TV} \ge 1 - \frac{8}{r^2}
-    \]
-\end{corollary}
-
-\begin{proof}
-    \begin{enumerate}
-        \item
-            See the exercises.
-    \end{enumerate}
-\end{proof}
-
-\begin{proposition}
-    For the lazy random walk on the \( n \)-dimensional hypercube
-    \[
-        d \left( \frac{1}{2} n \log n - \alpha n \right) \ge 1 - 8^{2 -
-        2\alpha}.
-    \]
-\end{proposition}
-
-\begin{proof}
-    \begin{enumerate}
-        \item
-            Apply Proposition~%
-            \ref{thm:convergencestatstionary:prop79} with \( f =
-            \operatorname{wt}
-            \).  The walker started \( \bar{1} \) is \( X_t \).
-        \item
-            As \( \pi \) is uniform on \( {0,1}^n \), the distribution
-            of the random variable \( W \) is \(
-            \operatorname{Bin}
-            (n,1/2) \), so \( \Esub{\pi}{W} = n/2 \) and \( \Varsub{x}{W}
-            = n/4 \).
-        \item
-            Recall that \( R_t \) is the number of coordinates not
-            updated by time \( t \).  When starting from \( \bar{1} \),
-            the conditional distribution of \(
-            \operatorname{wt}
-            (X_t) \), given \( R_t = r \) is \( r +
-            \operatorname{Bin}
-            (n-r, 1/2) \).
-        \item
-            Consequently,
-            \[
-                \Esub{1}{%
-                \operatorname{wt}
-                (X_{t}) \given R_t} = R_t + \frac{(n-R_t)}{2} = \frac{1}
-                {2}(R_t + n).
-            \]
-        \item
-            Using Lemma~%
-            \ref{thm:convergence:lem713}
-            \[
-                \Esub{\bar{1}}{%
-                \operatorname{wt}
-                (X_t)} = \frac{n}{2} \left[ 1 + \left( 1- \frac{1}{n}
-                \right)^t \right].
-            \]
-        \item
-            Recall the identity for variance using conditionals, applied
-            here as
-            \begin{align*}
-                \Varsub{\bar{1}}{%
-                \operatorname{wt}
-                (X_t)} &= \Varsub{\bar{1}}{\E{%
-                \operatorname{wt}
-                (X_t)} \given R_t} + \Esub{\bar{1}}{\Varsub{\bar{1}}{%
-                \operatorname{wt}
-                (X_t)} | R_t} \\
-                &= \frac{1}{4} \Varsub{\bar{1}}{%
-                \operatorname{wt}
-                (X_t)} + \frac{1}{4} \left[ n - \Esub{\bar{1}}{R_t}
-                \right].
-            \end{align*}
-        \item
-            Again using Lemma~%
-            \ref{thm:convergence:lem713}, \( R_t \) is the sum of
-            negatively correlated indicator functions and consequently, \(
-            \Varsub{\bar{1}}{R_t} \le \Esub{\bar{1}}{R_t} \) so \(
-            \Varsub{\bar{1}}{R_t} \le n/4 \).
-        \item
-            Set
-            \[
-                \sigma = \sqrt{\max[\Varsub{\pi}{W}, \Varsub{\bar{1}}{%
-                \operatorname{wt}
-                (X_t)}]} = \frac{\sqrt{n}}{2}.
-            \]
-        \item
-            Then
-            \[
-                \abs{\Esub{\pi}{W} - \Esub{\bar{1}}{%
-                \operatorname{wt}
-                (X_t)} } = \frac{n}{2} \left( 1 - \frac{1}{n} \right)^t
-                = \sigma \sqrt{n} \left( 1 - \frac{1}{n} \right)^t.
-            \]
-        \item
-            Set \( t_n = \frac{1}{2}(n-1)\log n - (\alpha-1)n > \frac{1}
-            {2}n \log n - \alpha n \) and using \( (1-1/n)^{n-1} >
-            \EulerE^{-1} > (1 - 1/n)^n \),
-            \[
-                \abs{\Esub{\pi}{W} - \Esub{\bar{1}}{%
-                \operatorname{wt}
-                (X_t)} } \EulerE^{\alpha-1} \sigma.
-            \]
-        \item
-            Applying Lemma~%
-            \ref{thm:convergence:prop79} gives
-            \[
-                d\left(\frac{1}{2} n \log n - \alpha n \right) \ge \| P^
-                {t_n}(\bar{1}, \cdot) - \pi \|_{TV} \ge 1 - 8\EulerE^{2-2\alpha}.
-            \]
-    \end{enumerate}
-\end{proof}
-
-\subsection*{Continuous State Space and Point Process MCMC}
-
-Consider three particles each randomly located in the square \( [0,1]^2
-\subset \Reals^2 \) with positions \( (x_{i1}, x_{i2}) \) for \( i =
-1,2,3 \).  The state space is \( \mathcal{X} = [0,1]^6 \).  Suppose the
-positions of the particles are distributed according to the density
-\[
-    \pi(x) = \pi(x_1,x_2,x_3) = \frac{1}{z} \exp\left[ -C \sum\limits_{i=1}^3
-    \|x_i\| - \sum\limits_{i<j} \frac{1}{\| x_i - x_j \|} \right]
-\] where \( \| \cdot \| \) is the usual Euclidean norm on \( \Reals^2 \),
-\( C \) and \( D \) are fixed positive constants and \( z \) is the
-normalizing constant or partition function.  In this density the first
-sum pushes the particle towards the origin, the second sum pushes them
-away from each other.
-
-Using the Metropolis algorithm, create a Markov chain with \( \pi \) as
-its stationary distribution.  Given \( X_n \), first choose \( y \in [0,1]^6
-\) from the uniform distribution on \( \mathcal{X} \).  Then with
-probability \( r = \min{1, \pi(y)/\pi(x)} \), accept \( X_{n+1} = y \),
-otherwise reject \( y \) and \( X_{n+1} = x \).  Then this Markov chain
-has \( \pi \) as its stationary distribution.
-
-\begin{lemma}
-    The Metropolis algorithm Markov chain for the \( 3 \) particle
-    system with stationary distribution
-    \[
-        \pi(x) = \pi(x_1,x_2,x_3) = \frac{1}{z} \exp\left[ -C \sum\limits_
-        {i=1}^3 \|x_i\| - \sum\limits_{i<j} \frac{1}{\| x_i - x_j \|}
-        \right]
-    \] satisfies a uniform minorization condition with \( n_0 = 1 \) and
-    \( \epsilon = (0.488) \exp(-C(3 \sqrt{2}) - D(12 - 3/ \sqrt{2})) \)
-\end{lemma}
-
-\begin{remark}
-
-\end{remark}
-With \( 3 \sqrt{2} \approx 4.243 \) and \( 12 - 3/\sqrt{2} \approx 9.879
-\), the estimate \( \epsilon = (0.488) \exp(-C(4.25) - D(9.88)) \) is
-simpler.
-
-\begin{proof}
-    \begin{enumerate}
-        \item
-            To avoid configurations where the particles are close
-            together, creating a near division by \( 0 \), set
-            \[
-                \mathcal{X}' = \setof{(x_1,x_2,x_3)}{\| x_i - x_j \| \ge
-                1/4}.
-            \]
-        \item
-            Being closed and bounded, the minimum value
-            \[
-                m = \min_{x,y \in \mathcal{X}} \frac{\pi(y)}{\pi(x)} > 0
-            \] is assumed on \( \mathcal{X} \).
-        \item
-            Let \( A \subseteq \mathcal{X}' \).  Then from any state \(
-            x \in \mathcal{X} \), the chain will move into \( A \) on
-            the next step provided the proposed new configuration \( y \)
-            is in \( A \) and the proposed configuration is accepted
-            according to the Bernoulli random variable.
-        \item
-            Hence
-            \begin{align*}
-                P(x,A) &= \int_A P(x,\df{y}) \\
-                &= \int_A \min{1, \frac{\pi(y)}{\pi(x)}} \df{y} \\
-                &\ge \int_{A \intersect \mathcal{X}'} m \df{y} \\
-                & m
+    \begin{proof}
+        \begin{enumerate}
+            \item
+                To avoid configurations where the particles are close
+                together, creating a near division by \( 0 \), set
+                \[
+                    \mathcal{X}' = \setof{(x_1,x_2,x_3)}{\| x_i - x_j \|
+                    \ge 1/4}.
+                \]
+            \item
+                Being closed and bounded, the minimum value
+                \[
+                    m = \min_{x,y \in \mathcal{X}} \frac{\pi(y)}{\pi(x)}
+                    > 0
+                \] is assumed on \( \mathcal{X}' \).
+            \item
+                Let \( A \subseteq \mathcal{X}' \).  Then from any state
+                \( x \in \mathcal{X} \), the chain will move into \( A \)
+                on the next step provided the proposed new configuration
+                \( y \) is in \( A \) and the proposed configuration is
+                accepted according to the Bernoulli random variable.
+            \item
+                Hence
+                \begin{align*}
+                    P(x,A) &= \int_A P(x,\df{y}) \\
+                    &= \int_A \min{1, \frac{\pi(y)}{\pi(x)}} \df{y} \\
+                    &\ge \int_{A \intersect \mathcal{X}'} m \df{y} \\
+                    & m
+                    \operatorname{Leb}
+                    (A \intersect \mathcal{X}')
+                \end{align*}
+                where \(
                 \operatorname{Leb}
-                (A \intersect \mathcal{X}')
-            \end{align*}
-            where \(
-            \operatorname{Leb}
-            (\cdot) \) is Lebesgue measure on \( \Reals^6 \).
-        \item
-            Set \( \epsilon =
-            \operatorname{Leb}
-            (\mathcal{X}') \) and \( \mu(A) =
-            \operatorname{Leb}
-            (A \intersect \mathcal{X}')/
-            \operatorname{Leb}
-            (\mathcal{X}') \), then \( \epsilon > 0 \) and \( \mu \) is
-            a probability measure and the uniform minorization condition
-            is satisfied.
-        \item
-            Numerical convergence bounds require estimation of \(
-            \operatorname{Leb}
-            (\mathcal{X}') \) and \( m \).
-        \item
-            In order for \( (x_1,x_2,x_3) \in \mathcal{X}' \), first
-            choose \( x_1 \in [0,1]^2 \) with area \( 1 \).  Then choose
-            any \( x_2 \in [0,1]^2 \setminus B(x_1, 1/4) \) with area
-            greater than \( 1 - (\text{pi})(1/4)^2 \).  Finally choose
-            any \( x_3 \in [0,1]^2 \setminus (B(x_1, 1/4) \union B(x_2,
-            1/4)) \) with area \( 1 - 2 \cdot (\text{pi})(1/4)^2 \).  (Here
-            \( B(x,r) \) is the ball in \( \Reals^2 \) with center \( x \)
-            and radius \( r \) and \( (\text{pi}) \) is used instead of
-            the traditional symbol to avoid confusion with the
-            stationary distribution.  This is the only place so far in
-            these notes where the notations have collided!)
-        \item
-            Hence \(
-            \operatorname{Leb}
-            (\mathcal{X}') \ge 1 (1 - 3.14/16)(1 - 3.14/8) \ge 0.488 \).
-        \item
-            For any \( x_{i}, x_j \in \mathcal{X}' \), \( 0 \le \|x\|
-            \le \sqrt{2} \) and \( 1/4 \le \| x_i x_j\| \le \sqrt{2} \).
-            Then \( 0 \le \sum\limits_{i=1}^3 \|x_i\|\le 3 \sqrt{2} \)
-            and
-            \[
-                \frac{3}{\sqrt{2}} \le \sum\limits_{i<j} \frac{1}{\| x_i
-                - x_j \|} \le 12.
-            \] Then
-            \[
-                m \ge \frac{\EulerE^{-C \cdot (3 \sqrt{2}) - D(12)}}{\EulerE^
-                {-C \cdot (0) - D(3/\sqrt{2})}} = \EulerE^{-C \cdot (3
-                \sqrt{2}) - D(12- 3/\sqrt{2})}.
-            \]
-    \end{enumerate}
-\end{proof}
+                (\cdot) \) is Lebesgue measure on \( \Reals^6 \).
+            \item
+                Set \( \epsilon =
+                \operatorname{Leb}
+                (\mathcal{X}') \) and \( \mu(A) =
+                \operatorname{Leb}
+                (A \intersect \mathcal{X}')/
+                \operatorname{Leb}
+                (\mathcal{X}') \), then \( \epsilon > 0 \) and \( \mu \)
+                is a probability measure and the uniform minorization
+                condition is satisfied.
+            \item
+                Numerical convergence bounds require estimation of \(
+                \operatorname{Leb}
+                (\mathcal{X}') \) and \( m \).
+            \item
+                In order for \( (\vect{x_1}, \vect{x_2}, \vect{x_3}) \in
+                \mathcal{X}' \), first choose \( \vect{x_1} \in [0,1]^2 \)
+                with area \( 1 \).  Then choose any \( \vect{x_2} \in [0,1]^2
+                \setminus B(\vect{x_1}, 1/4) \) with area greater than \(
+                1 - (\text{pi})(1/4)^2 \).  Finally choose any \( \vect{x_3}
+                \in [0,1]^2 \setminus (B(\vect{x_1}, 1/4) \union B(\vect
+                {x_2}, 1/4)) \) with area greater than \( 1 - 2 \cdot (\text
+                {pi})(1/4)^2 \).  (Here \( B(\vect{x}, r) \) is the ball
+                in \( \Reals^2 \) with center \( \vect{x} \) and radius \(
+                r \) and \( (\text{pi}) \) is used instead of the
+                traditional symbol to avoid confusion with the
+                stationary distribution.  This is the only place so far
+                in these notes where the notations about \( \pi \) have
+                collided!)
+            \item
+                Hence \(
+                \operatorname{Leb}
+                (\mathcal{X}') \ge 1 (1 - \text{pi}/16)(1 - \text{pi}/8)
+                \approx 0.48806 \).
+            \item
+                For any \( \vect{x_i}, \vect{x_j} \in \mathcal{X}' \), \(
+                0 \le \|\vect{x\|} \le \sqrt{2} \) and \( 1/4 \le \|
+                \vect{x_i} - \vect{x_j}\| \le \sqrt{2} \). Then \( 0 \le
+                \sum\limits_{i=1}^3 \|x_i\|\le 3 \sqrt{2} \) and
+                \[
+                    \frac{3}{\sqrt{2}} \le \sum\limits_{i<j} \frac{1}{\|
+                    x_i - x_j \|} \le 12.
+                \] Then
+                \[
+                    m \ge \frac{\EulerE^{-K_1 \cdot (3 \sqrt{2}) - K_2(12)}}
+                    {\EulerE^ {-K_1 \cdot (0) - K_2(3/\sqrt{2})}} =
+                    \EulerE^{-K_1 \cdot (3 \sqrt{2}) - K_2(12- 3/\sqrt{2})}.
+                \]
+        \end{enumerate}
+    \end{proof}
 
-\begin{remark}
-    The proof can be modified to give slightly better estimates by
-    taking the removed balls to have smaller radii.
-\end{remark}
+    \begin{remark}
+        The proof can be modified to give slightly better estimates by
+        taking the removed balls to have smaller radii.
+    \end{remark}
 
-If \( C = D = \frac{1}{10} \), then \( \epsilon = 0.117 \) giving the
-convergence bound
-\[
-    \|
-    \operatorname{dist}
-    (X_n) - \pi \|_{TV} \le (0.883)^n.
-\] After \( 38 \) steps, the total variation distance between the Markov
-chain and the stationary distribution is less than \( 0.01 \).
+    If \( K_1 = K_2 = \frac{1}{10} \) and using \( 3/\sqrt{2} \) and \(
+    12 - 3/\sqrt{2} \), then \( \epsilon \approx 0.14700 \) giving the
+    convergence bound
+    \[
+        \|
+        \operatorname{dist}
+        (X_n) - \pi \|_{TV} \le (0.853)^n.
+    \] After \( 29 \) steps, the total variation distance between the
+    Markov chain and the stationary distribution is less than \( 0.01 \).
+
+\end{example}
 
 \subsection*{Pseudo-Minorization Conditions}
 
 The coupling construction in the Minorization Estimate was a pairwise
-construction, it only considered states \( x \) and \( y \) at a time.
-Instead, replace \( \mu(\cdot) \) with \( \mu_{x,y}(\cdot) \) allowing
-it to depend on \( x \) and \( y \).  Then \( C \) is called a
+construction, it only considered \( 2 \) states \( x \) and \( y \) at a
+time. Instead, replace \( \mu(\cdot) \) with \( \mu_{x,y}(\cdot) \)
+allowing it to depend on \( x \) and \( y \).  Then \( C \) is called a
 pseudo-small set and the Minorization Estimate Theorem continues to
 hold.  See the exercises for the proof.  On a finite state space, choose
 \[
-    \epsilon = \min_{i,j \in \mathcal{X}}\sum_{z \in \mathcal{X}} \min_{i,j
-    \in \mathcal{X}} \left[ (P^{n_0})_{i,z} (P^{n_0})_{j,z} \right] > 0
+    \epsilon = \min_{i,j \in \mathcal{X}}\sum_{\nu \in \mathcal{X}} \min_
+    {i,j \in \mathcal{X}} \left[ (P^{n_0})_{i,\nu} (P^{n_0})_{j,\nu}
+    \right] > 0
 \] with
 \[
     \mu_{i,j}(z) = \frac{\min_{i,j \in \mathcal{X}} \left[ (P^{n_0})_{i,z}
     (P^{n_0})_{j,z} \right]}{\sum_{\nu \in \mathcal{X}} \min_{i,j \in
-    \mathcal{X}} \left[ (P^{n_0})_{i,z} (P^{n_0})_{j,z} \right] }.
+    \mathcal{X}} \left[ (P^{n_0})_{i,\nu} (P^{n_0})_{j,\nu} \right] }.
 \] Then the chain will satisfy an \( n_0 \)-minorization condition, for
 all \( i,j,z \in \mathcal{X} \), \( (P^{n_0})_{i,z} \ge \epsilon \mu_{i,j}
 (z) \) and \( (P^{n_0})_{j,z} \ge \epsilon \mu_{i,j}(z) \).  Then again
@@ -1341,42 +1071,57 @@ all \( i,j,z \in \mathcal{X} \), \( (P^{n_0})_{i,z} \ge \epsilon \mu_{i,j}
         \|
         \operatorname{dist}
         (X_n) - \pi \|_{TV} \le (1-\frac{1}{3})^{\lfloor n/2 \rfloor} =
-        \left( \frac{2}{3} \right)^{\lfloor n/2 \rfloor}
+        \left( \frac{2}{3} \right)^{\lfloor n/2 \rfloor}.
     \] To get the distribution of the random walk within \( 0.01 \) of
     the stationary distribution requires \( 24 \) steps.  Compare this
     to the estimates of \( 78 \) steps with the Minorization Condition,
-    and \( 6 \) step using the eigenvalues of \( P \).
+    and \( 14 \) steps using the eigenvalues of \( P \).
 \end{example}
 
+% to here Thu Mar 30 10:14:52 AM CDT 2023
+% http://www.probability.ca/jeff/ftpdir/NoticesAll.pdf
 \subsection*{Unbounded State Spaces}
 
-The uniform minorization condition gives a good quantitative convergence
+The uniform minorization condition gives a quantitative convergence
 bound.  However, often on unbounded state spaces, the minorization
 condition cannot be satisfied uniformly, only on some subset \( C
 \subset \mathcal{X} \).  In such cases, adjust the previous \( n_0 = 1 \)
-coupling construction, as follows.  First choose \( X0 \sim \mu(\cdot) \)
-and \( X_0' \sim \pi(\cdot) \) independently, and then inductively for \(
-n = 0, 1, 2, \dots \):
+coupling construction, as follows.
 \begin{enumerate}
     \item
+        Choose \( X0 \sim \mu(\cdot) \) and \( X_0' \sim \pi(\cdot) \)
+        independently.  This is the same as the previous coupling for
+        the uniform minorization condition.
+    \item
         If \( X_n = X_n' \), choose \( X_{n+1} = X_{n+1}' \sim P(X_n,
-        \cdot) \).
+        \cdot) \).  This also is the same as the previous coupling for
+        the uniform minorization condition.
     \item
         Else, if \( (X_n , X_n') \in C \times C \), flip a coin whose
-        probability of Heads is \( \epsilon \), and then update \( X_{n+1}
-        \) and \( X_{n+1}' \) in the same way as in step 2 of the
-        previous uniform minorization construction.
+        probability of Heads is \( \epsilon \).  If the coin shows
+        Heads, choose \( z \sim \mu(\cdot) \), and let \( X_{n+1}' = X_{n+1}
+        = z \).  Otherwise, update \( X_{n+1} \) and \( X_{n+1}' \)
+        independently with residual probabilities given by
+        \begin{align*}
+            \Prob{X_{n+1} \in A} &= \frac{P(X_n, A) - \epsilon \mu(A)}{1-\epsilon}
+            \\
+            \Prob{X_{n+1}' \in A} &= \frac{P(X_n', A) - \epsilon \mu(A)}
+            {1-\epsilon}.  \\
+        \end{align*}
+        This is the same update for \( X_{n+1} \) and \( X_{n+1}' \) as
+        in the previous uniform minorization construction, provided they
+        land in \( C \times C \)
     \item
         Else, if \( (X_n, X_n' ) \notin C \times C \), then
-        conditionally independently choose \( X_{n+1} \sim P(X_n, \cdot)
-        \) and \( X_{n+1}' \sim P(X_n', \cdot) \), i.e., the two chains
-        are simply updated independently.
+        independently choose \( X_{n+1} \sim P(X_n, \cdot) \) and \( X_{n+1}'
+        \sim P(X_n', \cdot) \), i.e., the two chains are simply updated
+        independently.
 \end{enumerate}
 
-The above construction provides good coupling bounds provided the two
-chains return to \( C \times C \) often enough, but this last property
-is difficult to guarantee.  Thus, to get convergence bounds, the Markov
-chian needs a drift condition.  Basically, the drift condition
+The above construction provides coupling bounds provided the two chains
+return to \( C \times C \) often enough, but this last property is
+difficult to guarantee.  Thus, to get convergence bounds, the Markov
+chain needs a drift condition.  Basically, the drift condition
 guarantees the chains will return to \( C \times C \) quickly enough to
 still achieve a coupling.
 
@@ -1394,7 +1139,7 @@ still achieve a coupling.
     respectively.
 \end{definition}
 
-Next define the quantity
+Next define
 \[
     B_{n_0} = \max{1, \alpha^{n_0}(1-\epsilon) \bar{R}h}
 \] where
@@ -1403,18 +1148,26 @@ Next define the quantity
     h(z,w) \left[ P^{n_0}(x, \df{z}) - \epsilon \mu(\df{z}) \right]
     \left[ P^{n_0}(y, \df{w}) - \epsilon \mu(\df{w}) \right].
 \] The expression \( \bar{R}h(x,y) \) represents the expected value of \(
-h(X_{n+{n_0}}, X_{n+{n_0}}) \) given \( X_n - x \)and \( X_n' = y \) and
+h(X_{n+{n_0}}, X_{n+{n_0}}) \) given \( X_n = x \)and \( X_n' = y \) and
 the two chains fail to couple at time \( n \), meaning the coin comes up
 Tails.
 
 \begin{theorem}
     Consider a Markov chain on \( \mathcal{X} \), with \( X_0 = x \) and
     transition probabilities \( P \).  Suppose the minorization and
-    bivariate drift conditions hold for some \( C \subseteq \mathcal{X} \),
-    \( h :  \mathcal{X} \times \mathcal{X} \to [1, \infty] \),
-    probability distribution \( \mu \), \( \alpha > 1 \), \( \epsilon >0
-    \).  Then for any integers, \( 1 \le j \le n \) with \( B_{n_0} \)
-    as above,
+    bivariate drift conditions hold for
+    \begin{enumerate}
+        \item
+            \( C \subseteq \mathcal{X} \),
+        \item
+            \( h :  \mathcal{X} \times \mathcal{X} \to [1, \infty] \),
+        \item
+            probability distribution \( \mu \), and
+        \item
+            \( \alpha > 1 \), \( \epsilon >0 \).
+    \end{enumerate}
+    Then for any integers, \( 1 \le j \le n \) with \( B_{n_0} \) as
+    above,
     \[
         \|
         \operatorname{dist}
@@ -1428,7 +1181,8 @@ Tails.
     \begin{enumerate}
         \item
             Create a second copy of the Markov chain with \( X_0' \sim
-            \pi \) and use the coupling construction.
+            \pi \) and use the generalized coupling construction in this
+            section.
         \item
             Let \( N_n \) be the number of times the chain \( (X_n, X_n')
             \) is in \( C \times C \) by the \( n \)th step.
@@ -1444,9 +1198,9 @@ Tails.
         \item
             The first term suggests the chains have not coupled by time \(
             n \) despite visiting \( C \times C \) at least \( j \)
-            times.  Since each such time gives them a chance of \(
-            \epsilon \) to couple, the first term is less or equal to \(
-            (1 - \epsilon)^j \).
+            times.  Since each such time gives them a chance \( \epsilon
+            \) to couple, the first term is less or equal to \( (1 -
+            \epsilon)^j \).
         \item
             The second term is more complicated, but from the bivariate
             drift condition together with a martingale argument, it can
@@ -1571,8 +1325,8 @@ then \( \Esub{\pi}{V} \le b/(1-\lambda) \).
                 Then \( [0,1] \subseteq [x-2, x+2] \) and \( B \subseteq
                 [z-2, z+2] \).
             \item
-                Hence the proposed density \( q \) satisfies \( q(z,z) =
-                q(z,) = \frac{1}{2} \).
+                Hence the proposed density \( q \) satisfies \( q(x,z) =
+                q(z, y) = \frac{1}{2} \).
             \item
                 Also, \( \pi(x) \le \EulerE^0 = 1 \) and \( \EulerE^{-1}
                 \le \pi(y) \le 1 \) and \( \pi(z) \ge \EulerE^{-1} \),
@@ -1767,13 +1521,1011 @@ then \( \Esub{\pi}{V} \le b/(1-\lambda) \).
     is much slower than other examples.
 
 \end{example}
+
+\subsection*{Random Walk on the Hypercube}
+
+% https://pages.uoregon.edu/dlevin/MARKOV/mcmt2e.pdf
+% https://sites.tufts.edu/vrdi/files/2019/06/Markov-Chains-and-Mixing-Times.pdf
+
+This subsection shows some sharper estimates of the rate of convergence
+in specific cases by using coupling.  Here the case of random walk on
+the hypercube exhibits tight bounds which can be used to demonstrate
+the \emph{cut-off} phenomenon.%
+\index{cut-off phenomenon}
+
+% definition of hypercube graph
+Let \( \mathbf{Q}^N \) be the \( N \)-dimensional hypercube graph, with
+vertices or node set
+\[
+    V(\mathbf{Q}^N) = \set{x_0, x_1, \dots x_N} = \set{0,1}^N
+\] and edge set
+\[
+    E(\mathbf{Q}^N) = \setof{(x,y)}{x, y \text{ differ in one coordinate}}.
+\]%
+\index{hypercube}
+As a notational convenience, let \( \bar{0} = (0, \dots, 0) \) denote
+the origin and \( \bar{1} = (1, \dots, 1) \) be the extreme vertex of
+the hypercube.
+
+% random walk/Markov chain on hypercube graph with stationary and implementation
+A random walk on this graph is the sequence \( X_0, X_1, \dots, X_n, X_{n+1},
+\dots \) where given \( X_n \), choose \( X_{n+1} \) uniformly at random
+from the nodes adjacent to \( X_n \).%
+\index{random walk!hypercube}
+A practical way to implement this random walk is to choose a coordinate \(
+j \in \set{1,2, \dots, N} \) uniformly at random and flip the bit at \(
+j \) from \( 0 \) to \( 1 \) or from \( 1 \) to \( 0 \).  For example,
+on the \( 3 \)-dimensional cube a walk at \( 011 \) will move to \( 111 \)
+if position \( 1 \) is selected, to \( 001 \) if position \( 2 \) is
+selected, and \( 010 \) if position \( 3 \) is selected.  As \( n \to
+\infty \), the distribution of \( X_n \) converges to the uniform
+distribution \( \pi \) on \( V(\mathbf{Q}^N) \).  (See the exercises.)
+This random walk has the annoying disadvantage of being periodic with
+period \( 2 \), so instead consider the \emph{lazy random walk}%
+\index{lazy random walk}
+sequence \( X_0, X_1, \dots, X_n, X_{n+1}, \dots \) where given \( X_n \),
+first choose to remain at \( X_n \) with probability \( \frac{1} {2} \).
+Alternatively, with probability \( \frac{1}{2} \) choose to move to \( X_
+{n+1} \) selected uniformly at random from the nodes adjacent to \( x_n \).
+A practical way to implement this random walk is to choose a coordinate \(
+j \in \set{1,2, \dots, N} \) uniformly at random and replace the bit in
+that position with the value of a fair Bernoulli random value.  The lazy
+random walk also converges to the uniform distribution \( \pi \) on \( V
+(\mathbf{Q}^N) \).  (See the exercises.)
+
+The goal is to understand the rate of convergence to the stationary
+distribution in the Total Variation norm.  More precisely, given fixed \(
+\epsilon \) what the smallest \( t = t(\epsilon) \) such that
+\[
+    \|
+    \operatorname{dist}
+    (X_t) - \pi \|_{TV} < \epsilon
+\] as a function of \( \epsilon \)?
+
+% coupling, and coupling time and implementation
+The investigation proceeds by coupling.%
+\index{coupling}
+Start one random walk \( X \) at \( \bar{0} \), and start another random
+walk \( Y \) ``far'' from \( \bar{0} \) at \( \bar{1} \).  Define \(
+\tau = \inf \setof{t} {X_t = Y_t} \).  Then define a coupled random walk
+\( X_t = Y_t \) for \( t > \tau \).
+
+An algorithm to simulate \( X_t \) and \( Y_t \) simultaneously is the
+following.  Given \( X_n = x \) and \( Y_n = y \), To generate \( X_{n+1}
+\) and \( Y_{n+1} \), choose \( j \in \set{1, 2, \dots, n} \) uniformly
+at random and replace \( x_j \) and \( y_j \) with the \emph{same}
+random bit chosen as the value of a fair Bernoulli random value. For
+example, on the \( 10 \)-dimensional hypercube suppose the \( X \)
+random walk is at \( 0011010011 \) and the \( Y \) random walk is at \(
+0110001010 \).  Position \( 6 \) is selected at random, and the
+Bernoulli random variable comes up \( 1 \).  The \( 6 \)th coordinate is
+\( 1 \), leaving \( X \) unchanged, but the \( Y \) chain moves to \(
+0110011010 \).  This example shows that each of the walks constructed in
+this way is a lazy random walk on the hypercube.
+
+% Adapted from Levin, Theorem 5.4, page 62
+The following is a general theorem for coupled Markov chains, with a
+simple proof using the Coupling Inequality.  Later, the theorem will be
+applied to the random walk on the hypercube.
+\begin{theorem}
+    \begin{enumerate}
+        \item
+            Let \( X_t, Y_t \) be coupled Markov chains with \( X_0 = x \)
+            and \( Y_0 = y \).
+        \item
+            Let \( \Probsub{x,y}{\cdot} \) be the joint probability
+            distribution for \( X_t, Y_t \).
+        \item
+            Let \( \tau_{\text{coal}} \) be the coalescence time of the
+            chains, that is
+            \[
+                \tau_{\text{coal}} = \min \setof{t}{X_s = Y_s, s \ge t}.
+            \]
+        \item
+            Then
+            \[
+                \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \Probsub{x,y}
+                {\tau_{\text{coal}} > t}.
+            \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            The first observation is that \( P^t(x, z) = \Probsub{x,y}{X_t
+            = z} \) and \( P^t(y, z) = \Probsub{x,y}{Y_t = z} \).
+        \item
+            Using the bound on the total variation metric from the
+            Coupling Inequality
+            \[
+                \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \Probsub{x,y}
+                {X_t \ne Y_t}.
+            \]
+        \item
+            But \( \Probsub{x,y}{X_t \ne Y_t} = \Probsub{x,y}{\tau_{\text
+            {coal}} > t} \) which completes the proof.
+    \end{enumerate}
+\end{proof}
+
+% notation and bounds on total variation distances
+Two convenient notations are
+\[
+    d(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) - \pi \|_{TV}
+\] and
+\[
+    \bar{d}(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot) - P^t(y,\cdot)\|_
+    {TV}.
+\]
+
+% Levin, Lemma 4>10, Section 4.3, Page 63
+\begin{lemma}
+    \[
+        d(t) \le \bar{d}(t) \le 2 d(t) \le 2 \bar{d}(t)
+    \]
+\end{lemma}
+
+\begin{remark}
+    These bounds make it clear that to understand the rate of
+    convergence \( d(t) \) (in Total Variation) of the hypercube random
+    walk Markov chain to uniform stationary, understanding \( \bar{d}(t)
+    \) is key.  The previous theorem gives a bound on \( \bar{d}(t) \)
+    in terms of \( \Probsub{x,y}{\tau_{\text{coal}} > t} \).  So
+    following this Lemma, bounding \( \Probsub{x,y}{\tau_{\text{coal}} >
+    t} \) is the goal.
+\end{remark}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            For the first inequality, start with the simple property of
+            stationarity \( \pi(z) = \sum_{y \in \mathcal{X}} \pi(y)
+            \left[ P^t(y,z) \right] \).
+        \item
+            Now for any set \( A \) of states, sum the previous over the
+            states \( z \in A \) so \( \pi(A) = \sum_{y \in \mathcal{X}}
+            \pi(y) \left[ P^t(y,A) \right] \)
+        \item
+            Using the row sum probability for a Markov chain is \( 1 \)
+            and applying absolute values
+            \[
+                \abs{P^t(x,A) - \pi(A)} = \abs{\sum_{y \in \mathcal{X}}
+                \pi(y) \left[ P^t(x,A) - P^{t}(y,A)\right]}.
+            \]
+        \item
+            By the triangle inequality, the definition of total
+            variation distance as the maximum sum of absolute
+            differences over all events, and the definition of \( \bar{d}
+            (t) \),
+            \[
+                \abs{\sum_{y \in \mathcal{X}} \pi(y) \left[ P^t(x,A) - P^
+                {t}(y,A)\right]} \le \sum_{y \in \mathcal{X}} \pi(y) \|
+                P^t(x,\cdot) - P^t(y,\cdot)\|_{TV} \le \bar{d}(t).
+            \]
+        \item
+            Maximizing the left side over \( x \in \mathcal{X} \) and \(
+            A \) yields \( d(t) \le \bar{d}(t) \).
+        \item
+            For the second inequality, start with the triangle
+            inequality for the total variation distance
+            \[
+                \| P^t(x, \cdot) - P^t(y,\cdot)\|_{TV} \le \| P^t(x,
+                \cdot) - \pi\|_{TV} + \| \pi - P^t(y,\cdot)\|_{TV}.
+            \]
+        \item
+            Then
+            \begin{multline*}
+                \bar{d}(t) = \max_{x \in \mathcal{X}} \| P^t(x, \cdot)
+                - P^t(y,\cdot)\|_{TV} \\
+                \le \max_{x \in \mathcal{X}}\| P^t(x, \cdot) - \pi\|_{TV}
+                + \max_{y \in \mathcal{X}} \| \pi - P^t(y,\cdot)\|_{TV}
+                \\
+                = 2 d(t).
+            \end{multline*}
+        \item
+            Since the first inequality \( d(t) \le \bar{d}(t) \) holds,
+            then \( 2d(t) \le 2\bar{d}(t) \) follows immediately.
+    \end{enumerate}
+\end{proof}
+
+% Since neither random walk is dependent on
+% history, but only on the current state, the probability of states in the
+% future is the same for each walk.  Combining the law of total
+% probability with the triangle inequality
+% \begin{align*}
+%     & \| \Prob{X_t} - \Prob{Y_t} \|_{TV} \le \\
+%     & \qquad \| \Prob{X_t \given \tau \le t} -
+%       \Prob{Y_t} \given \tau \le t \|_{TV} \Prob{\tau \le t} +\\
+%     & \qquad \| \Prob{X_t \given \tau > t} -
+%       \Prob{Y_t} \given \tau > t \|_{TV} \Prob{\tau > t} \\
+%     & \qquad = \| \Prob{X_t \given \tau > t} - \Prob{Y_t \given
+%     \tau \le t }\|_{TV} \Prob{\tau > t} & \le \Prob{\tau > t}.
+% \end{align*}
+% Notice the first summand is \( 0 \)
+% \[
+%     \| 0 = \Prob{X_t \given \tau \le t} - \Prob{Y_t}
+%     \given \tau \le t \|_{TV} \Prob{\tau \le t}
+% \] by the coupling construction.   The last inequality follows because the Total Variation
+% distance is less than  \( 1 \) \).
+
+% Recall
+% \begin{align*}
+%     \| \Prob{X_t} - \pi \|_{TV} &\le \max_{y} \| \Prob{X_t =
+%     \cdot} - \Prob{Y_t \given Y_0 = y} \|_{TV} \\
+%     &\le \| \Prob{X_t = \cdot} - \Prob{Y_t \given Y = \bar{1}} \|_{TV}
+%     \\
+%     &\le \Prob{\tau_{\bar{1}} > t}
+% \end{align*}
+
+% Hamming weight
+Let the \defn{Hamming weight}%
+\index{Hamming weight}
+of a vertex be the sum of the coordinates of the vertex, ranging from
+Hamming weight \( 0 \) at \( \bar{0} \) to \( n \) at \( \bar{1} \).  As
+notation, use \(
+\operatorname{ht}
+(x) \) for the Hamming weight of vertex \( x \).  Consider the schematic
+characterization of the hypercube in Figure~%
+\ref{fig:convergencestationary:hypercube}.  The plan for the remainder
+of the proof is show that both walks \( X_n \) and \( Y_n \) get to the
+bulk of the hypercube in \( \frac{n}{2} \log n \) steps, and then it
+takes an additional \( O(n) \) steps for them to meet.
+
+\begin{figure}
+    \centering
+\begin{asy}
+settings.outformat = "pdf";
+
+import graph;
+
+size(5inches);
+
+real myfontsize = 12;
+real mylineskip = 1.2*myfontsize;
+pen mypen = fontsize(myfontsize, mylineskip);
+defaultpen(mypen);
+
+real center = 7.5;
+real halfwidth = 4;		// perfect square
+real height = 2 * sqrt(halfwidth) + 2 * halfwidth;
+real l = center - halfwidth;
+real r = center + halfwidth;
+real h1 = sqrt(halfwidth);
+real h2 = halfwidth;
+real height = h1 + h2 + h1;
+real rr = r + 1.7;
+
+real f1( real x ) { return sqrt( abs( x - center ) ); }
+real f2( real x ) { return height - sqrt(abs( x - center ) );} 
+
+draw( graph(f1, l, r) );
+draw( (l, h1)--(l, h1+h2) );
+draw( (r, h1)--(r, h1+h2) );
+draw( graph(f2, l, r) );
+
+draw( (l, h1)--(r,h1), dashed);
+draw( (l, height/2)--(r,height/2), dashed);
+draw( (l, h1+h2)--(r,h1+h2), dashed);
+
+label("$\bar{0}$", (center, 0), S);
+label("$\bar{1}$", (center, height), N);
+
+yaxis(L="Hamming Weight", ymin=0, ymax = height, autorotate=false);
+ytick(Label("$0$", (0,0), E), (0,0));
+ytick(Label("$n/2 - O(\sqrt{n})$", (0,h1), SE), (0, h1));
+ytick(Label("$n/2$", (0, height/2), E), (0,height/2));
+ytick(Label("$n/2 + O(\sqrt{n})$", (0,h1+h2), NE), (0, h1+h2));
+ytick(Label("$n$", (0,height), E), (0,height));
+
+Label L1= Label("steps $\approx \frac{n}{2} \log n$", align=(0,0),
+		position=MidPoint, filltype=Fill(white));
+Label L2= Label("steps $=O(n)$", align=(0,0),
+		position=MidPoint, filltype=Fill(white));
+draw((rr,0)--(rr,h1), L=L1, bar=BeginBar, arrow=EndArrow);
+draw((rr,h1)--(rr,h1+h2), L = L2, bar=Bars);
+draw((rr,height)--(rr,h1+h2), L=L1, bar=BeginBar, arrow=EndArrow);
+\end{asy}
+    \caption{Caricature of the hypercube in terms of the Hamming weight
+    of the vertices.}%
+    \label{fig:convergencestationary:hypercube}
+\end{figure}
+
+% Definition of \tau and R_t
+If \( \tau \) is the first time when all the coordinates have been
+selected at least once, then the two walks agree with each other from
+time \( \tau \) onward.  Let \( R_t \) be the number of unselected
+coordinates at time \( t \).  Then \( \tau \) is the time that the
+number of unselected coordinates becomes \( 0 \), \( \tau = \min\setof{t}
+{R_t = 0} \). The random variable \( R_t \) decreases rapidly at first,
+then it slows down as it becomes harder to select unused coordinates.
+This is basically the \emph{coupon collectors} problem.
+% , so \( \E{R_t} = N(1 - 1/N)^t \).
+The usual formulation of the coupon collectors problem%
+\index{coupon collectors problem}
+has \( N \) different types of coupons or prizes in a cereal box. On
+each draw, one gets a coupon or prize equally likely to be any one of
+the \( N \) types.  The goal is to find the expected number of coupons
+one needs to gather before getting a complete set of at least one of
+each type.
+
+% This is Proposition 2.3 in Levin, et al.
+\begin{proposition}
+    Sample uniformly with replacement from the set \( \set{1, 2, \dots N}
+    \).  Let \( \tau \) be the number of draws required until each
+    element has been drawn at least once.  Then
+    \[
+        \E{\tau} = N \sum_{\nu=0}^N \frac{1}{\nu}.
+    \]
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            The expectation \( \E{\tau} \) can be computed by writing \(
+            \tau \) as a sum of geometric random variables.
+        \item
+            Let \( \tau_0 = 0 \).  Let \( \tau_k \) be the number of
+            selections when the collection first contains \( k \)
+            distinct set elements.
+        \item
+            Then \( \tau = \tau_N = (\tau_1 -\tau_0) + (\tau_2 - \tau_1)
+            + \cdots + (\tau_N - \tau_{N-1}) \).
+        \item
+            Furthermore, \( \tau_k - \tau_{k-1} \) is a geometric random
+            variable with success probability \( (N-k+1)/N \):  after
+            collecting \( k-1 \) coupons, there are \( N-k+1 \) types
+            missing from the collection.  Each subsequent coupon drawn
+            has the same probability \( (N - k + 1)/N \) of being a type
+            not already collected, until a new type is finally drawn.
+        \item
+            Thus
+            \[
+                \E{\tau_k - \tau_{k-1}} = N/(N - k + 1).
+            \]
+        \item
+            \[
+                \E{\tau} = \sum_{k=1}^{N} \E{\tau_k - \tau_{k-1}} = N
+                \sum_{k=1}^N \frac{1}{N-k+1} = N\sum_{\nu=0}^N \frac{1}{\nu}.
+            \]
+    \end{enumerate}
+\end{proof}
+
+% adapted from Levin, page 23, Proposition 2.4
+\begin{remark}
+    Recall that
+    \[
+        \abs{ \sum\limits_{\nu=1}^N \frac{1}{\nu} - \log N } \le 1
+    \] so \( \abs{\E{\tau} - N \log N} \le N \).  (In fact,
+    \[
+        \lim_{N \to \infty} \left( \sum\limits_{\nu=1}^N \frac{1}{\nu} -
+        \log N \right) = \gamma \approx 0.57721,
+    \] the Euler-Mascheroni constant. The estimate can be improved by
+    using Stirling's approximation.)
+\end{remark}
+
+But more about \( \tau \) can be said, the following lemma says \( \tau \)
+is unlikely to be much larger than the expected value.
+
+% This Lemma is Proposition 2.4 in Levin, etc, on page 22
+\begin{lemma}
+    Sample uniformly with replacement from the set \( \set{1, 2, \dots N}
+    \).  Let \( \tau \) be the number of draws required until each
+    element has been drawn at least once.  Then
+    \[
+        \Prob{\tau > N \log N + c N} \le \EulerE^{-c}
+    \] for \( c \ge 0 \) and \( N \ge 1 \).
+\end{lemma}
+
+\begin{proof}
+    Let \( m = N \log N + c N \).  For each integer \( \nu \) let \( A^{%
+    (m)}_\nu \) be the event ``integer \( \nu \) not drawn in the first \(
+    m \) draws''. Then
+    \[
+        \Prob{ \tau > m} = \Prob{ \bigcup_{\nu=1}^N A^{(m)}_\nu } \le
+        \sum_{\nu=1}^N \Prob{A^{(m)}_\nu} = N \left( 1 - \frac{1}{N}
+        \right)^m \le N \EulerE^{-m/N} = \EulerE^ {-c}.
+    \] See the exercises for a proof of the second inequality.
+\end{proof}
+
+\begin{corollary}
+    \[
+        t(\epsilon) \le N \log N + \log(\epsilon^{-1}) N.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            Given \( \epsilon > 0 \), \( t(\epsilon) \) is the smallest
+            time \( t \) such that
+            \[
+                \|
+                \operatorname{dist}
+                (X_t) - \pi \|_{TV} < \epsilon.
+            \]
+        \item
+            But
+            \[
+                \|
+                \operatorname{dist}
+                (X_t) - \pi \|_{TV} < \max_{x \in \mathcal{X}} \| P^t(x,
+                \cdot) - \pi \|_{TV} = d(t) \le \bar{d}(t).
+            \]
+        \item
+            A previous theorem gives a bound on \( \bar{d}(t) \) in
+            terms of \( \Probsub{x,y}{\tau_{\text{coal}} > t} \).
+        \item
+            However, \( \tau_{\text{coal}} \) is the number \( \tau \)
+            of draws required until each element has been drawn at least
+            once.  Then
+            \[
+                \Prob{\tau > N \log N + c N} \le \EulerE^{-c}.
+            \]
+        \item
+            So given \( \epsilon > 0 \), solving \( \epsilon = \EulerE^{-c}
+            \) for \( c \) with \( c = \log(\epsilon^{-1}) \), the least
+            time must be at least as great as \( N \log N + \log(\epsilon^
+            {-1}) N \).
+    \end{enumerate}
+\end{proof}
+
+% \begin{figure}
+%     \centering
+% \begin{asy}
+%   Want graph of N \log N + \log(\epsilon^{-1}) N here.
+% \end{asy}
+%     \caption{.}%
+%     \label{fig:convergencestationary:upperbound1}
+% \end{figure}
+
+\begin{remark}
+    This upper bound uses a simple and natural coupling of the two lazy
+    random walks started far apart.  The next more sophisticated
+    coupling of the two random walks gives an improved bound that
+    justifies the information in Figure~%
+    \ref{fig:convergencestationary:hypercube}.
+\end{remark}
+
+% Levin, Theorem 18.3
+\begin{theorem}
+    For the lazy random walk on the hypercube \( \mathbf{Q}^N \)
+    \[
+        t(\epsilon) \le \frac{1}{2} N \log N + \log(\epsilon^{-1}) N.
+    \]
+\end{theorem}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            Let \( X_t = (X_t^1, \dots \dots, X_t^N) \) be the position
+            of the lazy random walk on \( \mathbf{Q}^N \).  Let \( W_t =
+            ht(X_t) = \sum_{\nu=1}^N X_t^{\nu} \) be the Hamming weight
+            of \( X_t \).
+        \item
+            Note that \( W_t \) is the same as the alternate Ehrenfest
+            model and recall that the stationary distribution for the
+            alternate Ehrenfest model is \( \pi_W =
+            \operatorname{Bin}
+            (N,1/2) \), the binomial distribution with parameters \( N \)
+            and \( 1/2 \).
+        \item
+            Claim:
+            \[
+                \| \Probsub{\bar{1}}{X_t} - \pi \|_{TV} = \| \Probsub{n}
+                {W_t} - \pi_W \|_{TV}.
+            \] Proof of Claim:  Let \( L_w \) be the level set of \( ht(x)
+            \) on \( \mathbf{Q}^N \) corresponding to level \( w \).
+            The functions \( x \mapsto \Probsub{\bar{1}}{X_t=x} \) and \(
+            \pi \) are constant on \( L_w \). Therefore
+            \[
+                \sum_{x \in L_w} \abs{ \Probsub{\bar{1}}{X_t = x} - \pi(x)
+                } = \abs{\sum_{x \in L_w} \Probsub{\bar{1}}{X_t = x} -
+                \pi(x) }
+            \] because all summands are equal.  Then
+            \[
+                \abs{\sum_{x \in L_w} \Probsub{\bar{1}}{X_t = x} - \pi(x)
+                } = \abs{ \Probsub{n}{W_t = w} - \pi_W(w) }.
+            \] Summing over \( w = 0,1,\dots,N \) and dividing by \( 2 \)
+            gives the total variation metric, proving the claim.
+        \item
+            Now construct a coupling \( (W_t, Z_t) \) of the alternate
+            Ehrenfest chain started from \( w \) with the alternate
+            Ehrenfest chain started from \( z \).  Provided that the two
+            particles have not yet collided, at each move, a fair coin
+            is tossed to determine which of the two particles moves; the
+            chosen particle makes a transition according to the
+            transition probability matrix of the alternate Ehrenfest
+            model, while the other particle remains in its current
+            position.  The particles move together once they have met
+            for the first time.
+        \item
+            Suppose, without loss of generality, that \( z \ge w \).  By
+            the construction of the coupling, since the particles can't
+            cross before they have met and are the same after they have
+            met, \( Z_t \ge W_t \) for all \( t \).  Consequently, if \(
+            D_t = \abs{Z_t -W_t} \), then \( D_t = Z_t -W_t \ge 0 \).
+        \item
+            \label{enum:convergencestationary:coupledehren} Let \( \tau_
+            {text{coal}} = \min \setof{t \ge 0}{Z_t = W_t} \).
+            Conditioning on the event \( (Z_t, W_t) = (z_t, w_t) \) with
+            \( z_t \ne w_t \),
+            \[
+                D_{t+1} - D_t =
+                \begin{cases}
+                    1 & \text{with probability} (1/2)(1-z_t/N) + (1/2)w_t/N
+                    \\
+                    -1 & \text{with probability} (1/2)z_t/N + (1/2)(1-w_t/N).
+                    \\
+                \end{cases}
+            \]
+        \item
+            From the previous step, on the event \( \set{ \tau > t } \),
+            \[
+                \Esub{z,w}{D_{t+1}-D_t \given Z_t = z_t, W_t = w_t} = -
+                \frac{z_t - w_t}{N} = - \frac{D_t}{N}.
+            \]
+        \item
+            Since \( \indicatorrv{ \tau > t} = \indicatorrv{Z_t \ne W_t} \),
+            \[
+                \Esub{z,w}{\indicatorrv{\tau > t}D_{t+1} \given Z_t, W_t}
+                = \left( 1 - \frac{1}{N} \right) D_t \indicatorrv{\tau > t}.
+            \]
+        \item
+            Taking expectation,
+            \[
+                \Esub{z,w}{D_{t+1} \indicatorrv{\tau > t}} = \left( 1 -
+                \frac{1}{} \right) \Esub{z,w}{D_t \indicatorrv{\tau > t}}.
+            \]
+        \item
+            Since \( \indicatorrv{ \tau > t+1} \le \indicatorrv{ \tau > t} \),
+            \[
+                \Esub{z,w}{D_{t+1}\indicatorrv{\tau > t+1}} \le \left( 1 -
+                \frac{1}{n} \right) \Esub{z,w}{D_t \indicatorrv{\tau > t}}.
+            \]
+        \item
+            By induction
+            \[
+                \Esub{z,w}{D_{t+1} \indicatorrv{\tau > t}} \le ' \left( 1
+                - \frac{1}{N} \right)^t (z-w) \le N \EulerE^{-t/N}.
+            \]
+        \item
+            From step~%
+            \ref{enum:convergencestationary:coupledehren}, provided \( t
+            < \tau \), the process \( D_t \) is as least as likely to
+            move up as it is to move down.  Thus, until time \( \tau \),
+            the process \( D_t \) can be coupled with a simple random
+            walk, \( S_t \), so that \( S_0 = D_0 \) and \( D_t \le S_t \).
+        \item
+            If \( \bar{\tau} = \min\setof{t \ge 0}{S_t = 0} \), then \(
+            \tau \le \bar{\tau} \).
+        \item
+            There is a constant \( c_1 \) such that \( k \ge 0 \),
+            \[
+                \Probsub{k}{\tau > u} \le \Probsub{k}{\bar{\tau} > u}
+                \le \frac{c_1 k}{\sqrt{u} }.
+            \]
+
+        \item
+            Then
+            \[
+                \Probsub{z,w}{\tau > s + u \given D_s } = \indicatorrv{\tau
+                > s} \Probsub{D_s}{\tau > u} \le \frac{ c_1 D_s
+                \indicatorrv{\tau > s}}{ \sqrt{u} }.
+            \]
+        \item
+            Taking expectation, and applying the inequality from the
+            induction
+            \[
+                \Probsub{z,w}{\tau > s + u} \le \frac{ c_1 n \EulerE^{-s/n}}
+                {\sqrt{u}}.
+            \]
+        \item
+            Letting \( u = \alpha N \), and \( s = (1/2)N \log N \)
+            \[
+                d_n((1/2) N \log N + \alpha N) \le \frac{c_1}{\sqrt{\alpha}}.
+            \]
+
+        \item
+            Finally,
+            \[
+                \lim_{\alpha \to \infty} \limsup_{n \to \infty} d_n((1/2)
+                N \log N + \alpha N) = 0.
+            \]
+    \end{enumerate}
+\end{proof}
+
+% Given \( R_t \), the number of unselected coordinates at time $t$,
+% then $X_t$ started from $\bar{0}$ has $N-R_t$ selected coordinates,
+% each of which has been randomly chosen as the value of a fair
+% Bernoulli random variable.  Thus,  \( X_t \) has a Hamming
+% weight that is a binomial random variable,
+% \[
+%     \operatorname{ht}
+%     (X_t) =
+%     \operatorname{Bin}
+%   (N - R_t, 1/2).
+% \]
+% Similarly given $R_t$, $Y_t$ starting from $\bar{1}$ has a Hamming weight that is
+% a shifted binomial random variable
+% \[
+%     \operatorname{ht}
+%     (Y_t) =
+%     \operatorname{Bin}
+%     (N - R_t, 1/2) + R_t.
+% \]
+
+% Therefore, at time \( t \approx \frac{n}{2} \log n \)
+% \begin{align*}
+%     \E{%
+%     \operatorname{ht}
+%     (X_t)} &\approx \frac{n}{2} - \frac{\sqrt{n}}{2}, \\
+%     \E{%
+%     \operatorname{ht}
+%     (Y_t)} &\approx \frac{n}{2} + \frac{\sqrt{n}}{2}.
+% \end{align*}
+% and
+% \begin{align*}
+%     \SD{%
+%     \operatorname{ht}
+%     (X_t)} &= O(\sqrt{n}) \\
+%     \SD{%
+%     \operatorname{ht}
+%     (Y_t)} &= O(\sqrt{n}),
+% \end{align*}
+% where \( \SD(X) \) is the standard deviation of a random variable.
+
+Next is a lower bound, which together with the upper bound gives tight
+estimates on the convergence to the stationary distribution.
+
+\begin{theorem}
+    Let \( \epsilon > 0 \).  Then there exists an \( \alpha \ge 0 \) so
+    that for \( t(\alpha) = \frac{n}{2} \log n + \alpha n \), \( \Prob{\tau
+    > t(\alpha)} < \epsilon \).
+\end{theorem}
+
+\begin{lemma}
+    \label{thm:convergence:lem713}%
+    \index{coupon collectors problem}
+    \begin{enumerate}
+        \item
+            Consider the coupon collecting problem with \( N \) distinct
+            coupon types.
+        \item
+            Let \( I_j(t) \) be the indicator of the event that the \( j
+            \)-th coupon has not been collected by time \( n \).
+        \item
+            Let \( R_n = \sum_{\nu = 1}^N I_j(n) \) be the number of
+            coupon types not collected by time \( n \).
+    \end{enumerate}
+    Then the random variables \( I_j(n) \) are negatively correlated,
+    and letting \( p =(1 - 1/N)^n \) for \( n \ge 0 \),
+    \begin{align*}
+        \E(R_n) &= N p \\
+        \Var{R_n} &= N p (1- p) \le \frac{N}{4}.
+    \end{align*}
+\end{lemma}
+
+\begin{remark}
+    With this notation, notice the similarity to the mean and variance
+    of a binomial random variable.  It helps to remember that \( N \) is
+    the number of dimensions for the hypercube, and therefore the number
+    of nonzero Hamming weights or hyperplane levels for the hypercube
+    and the number of coupons in the collector's problem. The parameter \(
+    n \) corresponds to the step of the Markov chain or random walk on
+    the hypercube, and to the number of trials in the coupon collector's
+    problem.
+\end{remark}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            Since \( I_j(n) = 1 \) if and only if the first \( n \)
+            coupons are not of type \( j \), immediately
+            \begin{align*}
+                \E(I_j(n) ) &= \left( 1 - \frac{1}{N} \right)^n = p \\
+                \Var{I_j(n)} &= p (1- p).
+            \end{align*}
+        \item
+            Similarly, for \( j \ne k \),
+            \[
+                \E{ I_j(n) I_k(n) } = \left( 1 - \frac{2}{N} \right)^n.
+            \]
+        \item
+            Therefore
+            \[
+                \Cov{I_j(n) I_k(n)} = \left( 1 - \frac{2}{N} \right)^n -
+                \left( 1 - \frac{1}{N} \right)^{2n}.
+            \]
+        \item
+            To establish
+            \[
+                \left( 1 - \frac{2}{N} \right)^n - \left( 1 - \frac{1}{N}
+                \right)^{2n} \le 0
+            \] use proof by induction.  It is trivially true for \( n =
+            0 \).  Assuming that
+            \[
+                \left( 1 - \frac{2}{N} \right)^n - \left( 1 - \frac{1}{n}
+                \right)^{2n} \le 0
+            \] and using the simple fact that
+            \[
+                \left( 1 - \frac{2}{N} \right) \le \left( 1 - \frac{1}{n}
+                \right)^{2}
+            \] it follows that
+            \begin{multline*}
+                \left( 1 - \frac{2}{N} \right)^{n+1} \le \left( 1 -
+                \frac{1}{N} \right)^{2n} \left( 1 - \frac{2}{N} \right)
+                \\
+                \le \left( 1 - \frac{1}{N} \right)^{2n} \left( 1 - \frac
+                {2}{N} \right)^2 = \left( 1 - \frac{1}{N} \right)^{2(n+1)}
+            \end{multline*}
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}
+    When \( \mu \) is a probability distribution on \( \mathcal{X} \),
+    and \( f :  \mathcal{X} \to \Lambda \) is a function on \( \mathcal{X}
+    \), write \( \mu f^{-1} \) for the probability distribution defined
+    by
+    \[
+        (\mu f^{-1})(A) = \mu(f^{-1}(A))
+    \] for \( A \subset \Lambda \).  When \( X \) is an \( \mathcal{X} \)-valued
+    random variable with distribution \( \mu \), then \( f(X) \) has
+    distribution \( \mu f^{-1} \) on \( \Lambda \).
+\end{definition}
+
+\begin{lemma}
+    \label{thm:convergencestationary:lem710}
+    \begin{enumerate}
+        \item
+            Let \( \mu \) and \( \nu \) be probability distributions on \(
+            \mathcal{X} \).
+        \item
+            Let \( f:X \to \Lambda \) be a function on \( \mathcal{X} \)
+            where \( \Lambda \) is a finite set.
+    \end{enumerate}
+    Then \( \| \mu - \nu \|_{TV} \ge \| \mu f^{-1} - \nu f^{-1} \|_{TV} \).
+\end{lemma}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            First (read the parentheses carefully)
+            \[
+                \abs{\mu f^{-1}(B) - \nu f^{-1}(B)} = \abs{\mu (f^{-1}(B))
+                - \nu (f^{-1}(B))}.
+            \]
+        \item
+            Then
+            \[
+                \max_{B \subset \Lambda}\abs{\mu f^{-1}(B) - \nu f^{-1}(B)}
+                \le \max_{A \subset \mathcal{X}}\abs{\mu (A) - \nu (A)}.
+            \]
+        \item
+            The conclusion follows from the definition of the Total
+            Variation metric.
+    \end{enumerate}
+\end{proof}
+
+\begin{remark}
+    Use this lemma to lower bound the distance of some chain from
+    stationarity in terms of the corresponding distance for a projection
+    or lumping of that chain.  To do so, take \( \Lambda \) to be the
+    relevant partition of \( X \).
+\end{remark}
+
+\begin{proposition}
+    \label{thm:convergencestationary:prop79}
+    \begin{enumerate}
+        \item
+            Let \( f:\mathcal{X} \to \Reals \).
+        \item
+            Let \( \mu \), \( \nu \) be two probability distributions on
+            \( \mathcal{X} \).
+        \item
+            The notation \( \Esub{\mu}{f} \) denotes the expectation of \(
+            f(X) \) with respect to the measure \( \mu \).  Similarly
+            for \( \Esub{\nu}(f) \), \( \Varsub{\mu}{f} \), \( \Varsub{\nu}
+            {f} \).
+        \item
+            Define \( \sigma_{\star}^2 = \max[ \Varsub{\mu}{f}, \Varsub{\nu}
+            {f} ] \).
+        \item
+            Suppose \( \abs{ \Esub{\mu}{f} - \Esub{\nu}(f)} \ge r \sigma_
+            {\star} \).
+    \end{enumerate}
+    Then
+    \[
+        \| \mu - \nu \|_{TV} \ge 1 - \frac{8}{r^2}.
+    \]
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            Suppose without loss of generality that \( \Esub{\mu}{f} \le
+            \Esub{\nu}{f} \).
+        \item
+            Let \( A = (\Esub{\mu}{f} + r\sigma_{\star}/2, \infty) \),
+            then Chebyshev's Inequality yields \( \mu f^{-1}(A) \le
+            \frac{4}{r^2} \) and \( \nu f^{-1}(A) \ge 1 - \frac{4}{r^2} \).
+        \item
+            Then
+            \[
+                \| \mu f^{-1} -\nu f^{-1} \|_{TV} \ge 1 - \frac{8}{r^2}.
+            \]
+        \item
+            Then apply Lemma~%
+            \ref{thm:convergencestationary:lem710} to complete the
+            proof.
+    \end{enumerate}
+\end{proof}
+
+\begin{corollary}
+    \label{thm:convergencestationary:cor79} Suppose For a Markov chain \(
+    X_t \) with transition probability matrix \( P \), the function \( f
+    \) satisfies
+    \[
+        \abs{ \Esub{x}{f(X_t)} - \Esub{\pi}{f}} \ge r \sigma_{\star}
+    \] then
+    \[
+        \| P^t(x, \cdot) - \pi \|_{TV} \ge 1 - \frac{8}{r^2}.
+    \]
+\end{corollary}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            See the exercises.
+    \end{enumerate}
+\end{proof}
+
+\begin{proposition}
+    For the lazy random walk on the \( N \)-dimensional hypercube
+    \[
+        d \left( \frac{1}{2} N \log N - \alpha N \right) \ge 1 - 8^{2 -
+        2\alpha}.
+    \]
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item
+            Apply Proposition~%
+            \ref{thm:convergencestatstionary:prop79} with \( f =
+            \operatorname{ht}
+            \).  That is, let \( W_n = ht(X_n) \) where the walker
+            started at \( \bar{1} \) is \( X_n \).
+        \item
+            As \( \pi \) is uniform on \( {0,1}^N \), the distribution
+            of the random variable \( W \) is \(
+            \operatorname{Bin}
+            (n,1/2) \), so \( \Esub{\pi}{W} = n/2 \) and \( \Varsub{x}{W}
+            = n/4 \).
+        \item
+            Recall that \( R_n \) is the number of coordinates not
+            updated by time \( t \).  When starting from \( \bar{1} \),
+            the conditional distribution of \(
+            \operatorname{ht}
+            (X_n) \), given \( R_n = r \) is \( r +
+            \operatorname{Bin}
+            (n-r, 1/2) \).
+        \item
+            Consequently,
+            \[
+                \Esub{\bar{1}}{%
+                \operatorname{ht}
+                (X_{t}) \given R_n} = R_n + \frac{(n-R_n)}{2} = \frac{1}
+                {2}(R_n + n).
+            \]
+        \item
+            Using Lemma~%
+            \ref{thm:convergence:lem713}
+            \[
+                \Esub{\bar{1}}{%
+                \operatorname{ht}
+                (X_n)} = \frac{N}{2} \left[ 1 + \left( 1- \frac{1}{N}
+                \right)^n \right].
+            \]
+        \item
+            Recall the identity for variance using conditionals, applied
+            here as
+            \begin{align*}
+                \Varsub{\bar{1}}{%
+                \operatorname{ht}
+                (X_n)} &= \Varsub{\bar{1}}{\E{%
+                \operatorname{ht}
+                (X_n)} \given R_n} + \Esub{\bar{1}}{\Varsub{\bar{1}}{%
+                \operatorname{ht}
+                (X_n)} | R_n} \\
+                &= \frac{1}{4} \Varsub{\bar{1}}{%
+                \operatorname{ht}
+                (X_n)} + \frac{1}{4} \left[ N - \Esub{\bar{1}}{R_n}
+                \right].
+            \end{align*}
+        \item
+            Again using Lemma~%
+            \ref{thm:convergence:lem713}, \( R_n \) is the sum of
+            negatively correlated indicator functions and consequently, \(
+            \Varsub{\bar{1}}{R_n} \le \Esub{\bar{1}}{R_n} \) so \(
+            \Varsub{\bar{1}}{R_n} \le N/4 \).
+        \item
+            Set
+            \[
+                \sigma = \sqrt{\max[\Varsub{\pi}{W}, \Varsub{\bar{1}}{%
+                \operatorname{ht}
+                (X_n)}]} = \frac{\sqrt{N}}{2}.
+            \]
+        \item
+            Then
+            \[
+                \abs{\Esub{\pi}{W} - \Esub{\bar{1}}{%
+                \operatorname{ht}
+                (X_n)} } = \frac{N}{2} \left( 1 - \frac{1}{N} \right)^n
+                = \sigma \sqrt{N} \left( 1 - \frac{1}{N} \right)^n.
+            \]
+        \item
+            Set \( t_N = \frac{1}{2}(N-1)\log N - (\alpha-1)N > \frac{1}
+            {2}N \log N - \alpha N \) and using \( (1-1/N)^{N-1} >
+            \EulerE^{-1} > (1 - 1/N)^N \),
+            \[
+                \abs{\Esub{\pi}{W} - \Esub{\bar{1}}{%
+                \operatorname{ht}
+                (X_n)} } \EulerE^{\alpha-1} \sigma.
+            \]
+        \item
+            Applying Lemma~%
+            \ref{thm:convergence:prop79} gives
+            \[
+                d\left(\frac{1}{2} N \log N - \alpha N \right) \ge \| P^
+                {t_N}(\bar{1}, \cdot) - \pi \|_{TV} \ge 1 - 8\EulerE^{2-2\alpha}.
+            \]
+    \end{enumerate}
+\end{proof}
+
 \visual{Section Starter Question}{../../../../CommonInformation/Lessons/question_mark.png}
 \section*{Section Ending Answer}
 
-\subsection*{Sources} This section is adapted from:
+A Markov chain gives the probability distribution of a random process
+from a starting distribution.  The stationary distribution is a
+probability distribution for the Markov chain in a steady state.  So
+it makes sense to measure the distance between probability measures.
+There are many ways to measure the distance between probability
+measures, including the Total Variation distance which is common and
+simple.  For finite Markov chains, the Total Variation distance is (a
+multiple of) an $L^1$ distance between vectors. Using the triangle
+inequality for absolute values makes this distance easy to apply,
+justifying the common and simple description.  For an arbitrary step
+of the Markov chain, taking the maximum over all starting
+distributions of Total Variation distance from the stationary
+distribution gives an indication of the convergence of the Markov
+chain to stationary.
 
-\nocite{}
-\nocite{}
+For a finite Markov chain, the Euclidean distance between the vectors
+representing the Markov chain distribution and the stationary
+distribution is typical.  The chi-squared distance which is like an
+$L^2$ distance with respect to a measure is a generalization of the
+Euclidean distance.  In eigenvalue and eigenfunction expansions, both
+are natural choices but the squaring and square roots makes this
+distance harder to use.
+
+Other possible distances are Kullback-Leibler divergence which is
+sometimes used in information theory (and is not a true distance
+because it is not symmetric and does not satisfy the triangle
+inequality), the Hellinger distance, and the Wasserstein metric.
+Various inequalities relate these distances to one another.
+
+\subsection*{Sources} The Convergence Theorem by Total Variation with
+proof is adapted from Section 5.2 of~\cite{levin09}.
+
+The sections on Coupling and Minorization, Continuous State Space
+example, Pseudo-Minorization Conditions, and Unbounded State Spaces are
+based on~\cite[jiang21].
+
+The example of the cut-off phenomenon in random walk on the hypercube is
+based on Sections 2.2, 5.3.1, 7.3.1, and 18.1 of~\cite{levin09}.
+
+% \nocite{}
+% \nocite{}
 
 \hr
 
@@ -1782,9 +2534,38 @@ then \( \Esub{\pi}{V} \le b/(1-\lambda) \).
 
 \subsection*{Algorithm}
 
+\begin{algorithm}[H]
+  \DontPrintSemicolon
+  \SetKwInOut{Output}{Output}
+  \SetKwData{K1}{K1}
+  \SetKwData{K2}{K2}
+  \SetKwData{cS}{convergenceSteps}
+  \SetKwData{sS}{stationarySteps}
+
+  Define norm function for vectors\;
+  Define desired stationary distribution function \( \pi \) using
+  \( K_1 \) and \( K_2 \)\;
+  Define the acceptance probability function using the stationary
+  distribution\;
+  Choose $3$ $2$-vectors in \( \Reals^2 \) as a $2 \times 3$ matrix
+  as the starting value \( X_0 \)\;
+
+  Given \( X_n \), first choose \( y \in [0,1]^6
+  \) from the uniform distribution\;
+  For \cS steps do the transient chain to stationary\;
+  With accpetance probability \( r = \min{1, \pi(y)/\pi(x)} \),
+  accept \( X_{n+1} = y \), otherwise reject \( y \) and \( X_{n+1} = x \).
+
+  For \sS steps do the  stationary chain\;
+  With accpetance probability \( r = \min{1, \pi(y)/\pi(x)} \),
+  accept \( X_{n+1} = y \), otherwise reject \( y \) and \( X_{n+1} =
+  x \)\;
+
+  Plot the points in the stationary distribution\;
+\end{algorithm}
 \subsection*{Scripts}
 
-% \input{ _scripts}
+\input{convergenceStationary_scripts}
 
 \hr
 
@@ -1794,23 +2575,187 @@ then \( \Esub{\pi}{V} \le b/(1-\lambda) \).
 \renewcommand{\theexercise}{\arabic{exercise}}
 
 \begin{exercise}
+    Recall the magical land of Oz where the weather follows a pattern.
+    If it is raining today, then tomorrow has a \( 50\% \) chance of
+    raining again, and a \( 25\% \) chance of either having a nice day
+    or a snowy day tomorrow.  Similarly if it is snowing, the next day
+    has a \( 50\% \) chance of again having snow, and a \( 25\% \)
+    chance of either having a nice day, or a rainy day.  Also the land
+    of Oz never has two nice days in a row, and equally has rain or snow
+    the day after a nice day.  Recall that for \( P^n \), for large
+    values of \( n \), the row vectors approach the stationary
+    distribution \( \mathbf{\pi}=(2/5,1/5,2/5) \). Following the proof
+    of the Convergence Theorem by Total Variation, estimate the
+    parameters \( C \) and \( \alpha \).  Compare to the estimated rate
+    of convergence using the eigenvalues of the transition probability
+    matrix.
+\end{exercise}
+\begin{solution}
+    The transition probability matrix is
+    \[
+        P =
+        \begin{pmatrix}
+            1/2 & 1/4 & 1/4 \\
+            1/2 & 0/1 & 1/2 \\
+            1/4 & 1/4 & 1/2
+        \end{pmatrix}
+    \] and
+    \[
+        P^2 =
+        \begin{pmatrix}
+            7/16 & 3/16 & 3/8 \\
+            3/8 & 1/4 & 3/8 \\
+            3/8 & 3/16 & 7/16
+        \end{pmatrix}
+    \] has strictly positive entries, so \( r = 2 \).  For \( \epsilon =
+    15/16 \), \( (P^r)_{ij} \ge \delta \pi_{j} \) for \( i,j \in
+    \mathcal{X} \).  Then \( \theta = 1- 15/16 = 1/16 \).  Then
+    \[
+        Q =
+        \begin{pmatrix}
+            11/25 & 14/75 & 28/75 \\
+            28/75 & 19/75 & 28/75 \\
+            28/75 & 14/75 & 11/25 \\
+        \end{pmatrix}
+    \] is a stochastic matrix.  The constants are \( \alpha = \theta^{1/2}
+    = \sqrt{1/16} = 1/4 \) and \( C = 16 \).  In the section Spectral
+    Bounds, the generally best estimate using the eigenvalues and
+    eigenvectors is \( (\sqrt{14}/5)(1/4)^n \), so for this simple
+    example the theorem estimate is good up to the constant.
+  \end{solution}
+
+  \begin{exercise}
+    For the alternate Ehrenfest model with $N = 7$, show
+    by numerical
+    experimentation it takes \( 31 \) steps to make the total variation
+    distance from the stationary distribution less than \( 0.01 \).
+  \end{exercise}
+  \begin{solution}
+    Using some minimal R code, without regard to possible efficiency:
+\begin{verbatim}
+library(expm)
+
+N <- 7; p <- 1/2; q <- 1 - p;
+stateNames <- as.character( 0:N )
+## Be careful here, because states numbered from 0,
+## but R indexes from 1
+transMatrix <- matrix(0, N+1,N+1)
+transMatrix[1,1] <- q
+transMatrix[1,2] <- p
+transMatrix[N+1, N  ] <- q
+transMatrix[N+1, N+1] <- p
+for (row in 2:N) {
+    transMatrix[row, row-1] <- ((row-1)/N)*q
+    transMatrix[row,row] <- ((N-(row-1))/N)*q + ((row-1)/N)*p
+    transMatrix[row,row+1] <- ((N-(row-1))/N)*p
+}
+
+stationary = c( 1/128, 7/128, 21/128, 35/128, 35/128, 21/128, 7/128, 1/128 )
+
+for (row in 1:(N+1) ) {
+    PI[row, ] <- stationary
+}
+
+v1 <- rep(1, 8)
+
+test30 <- max( (1/2) * abs( (transMatrix %^% 30) - PI ) %*% v1 )
+test31 <- max( (1/2) * abs( (transMatrix %^% 31) - PI ) %.% v1)
+
+#  Alternative code using apply( , 1, sum)
+#  test30 <- max( (1/2) * apply( abs( (transMatrix %^% 30) - PI ), 1, sum ) )
+#  test31 <- max( (1/2) * apply( abs( (transMatrix %^% 31) - PI ), 1, sum ) )
+
+cat("Total Variation distance after 30 steps: ", test30, "\n")
+cat("Total Variation distance after 31 steps: ", test31, "\n")
+\end{verbatim}
+  \end{solution}
+
+  \begin{exercise}
+    For the $3 \times 3$ lattice random walk, show
+    by numerical
+    experimentation it takes \( 31 \) steps to make the total variation
+    distance from the stationary distribution less than \( 0.01 \).
+  \end{exercise}
+  \begin{solution}
+\begin{verbatim}
+library(expm)
+
+N=9
+P <- matrix(0, N, N)
+P[1,1] <- P[1,2] <- P[1, 4] <- 1/3
+P[2,1] <- P[2,2] <- P[2, 3] <- P[2,5] <- 1/4
+P[3,2] <- P[3,3] <- P[3, 6] <- 1/3
+P[4,1] <- P[4,4] <- P[4, 5] <- P[4,7] <- 1/4
+P[5,2] <- P[5,4] <- P[5, 5] <- P[5,6] <- P[5,8] <- 1/5
+P[6,3] <- P[6,5] <- P[6, 6] <- P[6, 9] <- 1/4
+P[7,4] <- P[7,7] <- P[7, 8] <- 1/3
+P[8,5] <- P[8,7] <- P[8,8] <-P[8, 9] <- 1/4
+P[9,6] <- P[9,8] <- P[9, 9] <- 1/3
+
+
+stationary = c( 1/11, 4/33, 1/11, 4/33, 5/33, 4/33, 1/11, 4/33, 1/11 )
+
+PI = matrix(0, N, N)
+for (row in 1:N ) {
+    PI[row, ] <- stationary
+}
+
+v1 <- rep(1, 9)
+
+test11 <- max( (1/2) * abs( (P %^% 11) - PI ) %*% v1 )
+test12 <- max( (1/2) * abs( (P %^% 12) - PI ) %*% v1 )
+
+#  Alternative code using apply( , 1, sum)
+#  test11 <- max( (1/2) * apply( abs( (P %^% 11) - PI ), 1, sum ) )
+#  test12 <- max( (1/2) * apply( abs( (P %^% 12) - PI ), 1, sum ) )
+
+cat("Total Variation distance after 11 steps: ", test11, "\n")
+cat("Total Variation distance after 12 steps: ", test12, "\n")
+\end{verbatim}
+  \end{solution}
+
+\begin{exercise}
     Prove the Minorization Condition Theorem under the less restrictive
     pseudo-minorization condition.
 \end{exercise}
 \begin{solution}
     To be done.
 \end{solution}
-% \begin{exercise}
-%     \begin{enumerate}[label=(\alpha*)]
-%     \item
-% \end{enumerate}
-% \end{exercise}
-% \begin{solution}
-%     \begin{enumerate}[label=(\alpha*)]
-%     \item
-% \end{enumerate}
-% \end{solution}
 
+\begin{exercise}
+    For the random walk on the hypercube \( X_n \) show that as \( n \to
+    \infty \), the distribution of \( X_n \) converges to the uniform
+    distribution \( \pi \) on \( V(\mathbb{Q}^n) \).
+\end{exercise}
+\begin{solution}
+    As a weighted (weights uniformly \( 1 \) for adjacent vertices)
+    random walk on a graph, the random walk as Markov chain is
+    irreducible and reversible.  In this simple case with no self-edges
+    and all nonzero weights equal to \( 1 \), the section on Reversible
+    Markov Chains shows the invariant distribution is
+    \[
+        \pi_i = \frac{%
+        \operatorname{degree}
+        (i)}{2 \cdot (\text{number of edges})} = \frac{n}{2 \cdot 2
+        \cdot 2^{n-1}} = \frac{1}{2^n}.
+    \] The only part left to establish is the number of edges.  For a
+    hypercube of dimension \( n \), the number of edges from each vertex
+    is the dimension of the hypercube \( n \), and the total number of
+    vertices is \( 2^n \).  This counts every edge twice, once for each
+    of its endpoints.  The number of edges of a cube of dimension \( n \)
+    is then half of this number, \( n 2^{n-1} \).
+\end{solution}
+
+\begin{exercise}
+    Show that \( (1 - 1/N)^m \le \EulerE^{-m/N} \)
+\end{exercise}
+\begin{solution}
+    Taking logarithms of both sides, this is equivalent to showing \( m
+    \log(1 - 1/N) \le -m/N \) or \( \log(1 - 1/N) \le -1/N \).  This is
+    a standard inequality most easily seen by noting that \( \log(1 +x )
+    = x \) for \( x = 0 \) and \( \log( 1 + x) \) is concave down, so \(
+    \log(1 + x) \le x \), in particular for \( -1 < x < 0 \).
+\end{solution}
 \hr
 
 \visual{Books}{../../../../CommonInformation/Lessons/books.png}
@@ -1847,4 +2792,6 @@ Last modified:  \flastmod
 
 %%% Local Variables:
 %%% TeX-master: t
+%%% TeX-master: t
+%%% TeX-master: "convergencestationary"
 %%% End:
